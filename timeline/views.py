@@ -8,8 +8,8 @@ from django.template import loader
 from django.utils import translation
 
 from cms.models import Content
-from .form import AddRatingsForm, AddVersionModelForm
-from .models import App, Version, Rating, SemanticVersion
+from .form import AddRatingsForm, AddVersionModelForm, AddActiveUsersForm
+from .models import App, Version, Rating, SemanticVersion, ActiveUsers
 from .utils import first, ChartData, ChartDataset, ChartMarker, prev_two_month
 
 
@@ -442,3 +442,142 @@ def add_ratings(request):
         form = AddRatingsForm(form_data)
 
     return render(request, 'timeline/rating_form.html', {'form': form})
+
+
+def active_users(request):
+    """
+        active users page
+
+        :param request: request
+        :return: response
+        """
+    app_list = App.objects.all
+    chart_data = ChartData()
+
+    # get all dates
+    for active_user in ActiveUsers.objects.order_by('date'):
+        chart_data.timeline.append(active_user.date)
+
+    # remove duplicates
+    chart_data.timeline = list(set(chart_data.timeline))
+
+    # sort
+    chart_data.timeline.sort()
+
+    # prefill
+    for app_val in App.objects.all():
+        chart_dataset = ChartDataset(app_val.name, app_val.color, app_val.solid)
+        for _ in chart_data.timeline:
+            chart_dataset.data.append('0.00')
+
+        chart_data.datasets.append(chart_dataset)
+
+    # actually fill
+    for active_user in ActiveUsers.objects.order_by('date'):
+        try:
+            index_val = chart_data.timeline.index(active_user.date)
+
+            dataset = next((x for x in chart_data.datasets if x.name == active_user.app.name), None)
+            if dataset is not None:
+                dataset.data[index_val] = active_user.users
+        except ValueError:
+            pass
+
+    template = loader.get_template('timeline/active_users.html')
+
+    context = {
+        'app_list': app_list,
+        'title': 'Active Users',
+        'chart_data': chart_data
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def add_active_users(request):
+    """
+    add new active users
+
+    :param request:
+    :return:
+    """
+
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AddActiveUsersForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # get data
+            date_val = form.cleaned_data['date']
+            users_myf_android = form.cleaned_data['myf_android']
+            users_myf_ios = form.cleaned_data['myf_ios']
+            users_fon_android = form.cleaned_data['fon_android']
+            users_fon_ios = form.cleaned_data['fon_ios']
+            users_wlan_android = form.cleaned_data['wlan_android']
+            users_wlan_ios = form.cleaned_data['wlan_ios']
+            users_tv_android = form.cleaned_data['tv_android']
+            users_tv_ios = form.cleaned_data['tv_ios']
+            users_smart_home_android = form.cleaned_data['smart_home_android']
+            users_smart_home_ios = form.cleaned_data['smart_home_ios']
+
+            # myfritz
+            app_myf_android = App.objects.get(id=1)
+            myf_android = ActiveUsers(app=app_myf_android, date=date_val, users=users_myf_android)
+            myf_android.save()
+
+            app_myf_ios = App.objects.get(id=2)
+            myf_ios = ActiveUsers(app=app_myf_ios, date=date_val, users=users_myf_ios)
+            myf_ios.save()
+
+            # fon
+            app_fon_android = App.objects.get(id=3)
+            fon_android = ActiveUsers(app=app_fon_android, date=date_val, users=users_fon_android)
+            fon_android.save()
+
+            app_fon_ios = App.objects.get(id=4)
+            fon_ios = ActiveUsers(app=app_fon_ios, date=date_val, users=users_fon_ios)
+            fon_ios.save()
+
+            # wlan
+            app_wlan_android = App.objects.get(id=5)
+            wlan_android = ActiveUsers(app=app_wlan_android, date=date_val, users=users_wlan_android)
+            wlan_android.save()
+
+            app_wlan_ios = App.objects.get(id=6)
+            wlan_ios = ActiveUsers(app=app_wlan_ios, date=date_val, users=users_wlan_ios)
+            wlan_ios.save()
+
+            # tv
+            app_tv_android = App.objects.get(id=7)
+            tv_android = ActiveUsers(app=app_tv_android, date=date_val, users=users_tv_android)
+            tv_android.save()
+
+            app_tv_ios = App.objects.get(id=8)
+            tv_ios = ActiveUsers(app=app_tv_ios, date=date_val, users=users_tv_ios)
+            tv_ios.save()
+
+            # smart home
+            app_smart_home_android = App.objects.get(id=9)
+            smart_home_android = ActiveUsers(app=app_smart_home_android, date=date_val, users=users_smart_home_android)
+            smart_home_android.save()
+
+            app_smart_home_ios = App.objects.get(id=10)
+            smart_home_ios = ActiveUsers(app=app_smart_home_ios, date=date_val, users=users_smart_home_ios)
+            smart_home_ios.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect('/timeline/active_users/?action=added')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        date_val = date.today()
+        form_data = {'date_0': date_val.month, 'date_1': date_val.year}
+
+        form = AddActiveUsersForm(form_data)
+
+        for field in form.fields:
+            form.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+    return render(request, 'timeline/active_users_form.html', {'form': form})

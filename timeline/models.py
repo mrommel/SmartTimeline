@@ -3,7 +3,7 @@ from datetime import date
 from colorfield.fields import ColorField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from month.models import MonthField
 from timeline.utils import month_delta
 
 
@@ -115,3 +115,12 @@ class Rating(models.Model):
     # ...
     def __str__(self):
         return _('Rating of %s at %s') % (self.app.name, self.pub_date)
+
+
+class ActiveUsers(models.Model):
+    app = models.ForeignKey(App, on_delete=models.CASCADE)
+    users = models.IntegerField()
+    date = MonthField('date')
+
+    def __str__(self):
+        return _('Number of Users of %s at %s') % (self.app.name, self.date)

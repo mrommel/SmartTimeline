@@ -15,8 +15,8 @@ deactivate
 => http://127.0.0.1:8000/timeline/dashboard
 
 
-pip freeze > requirements.txt
-pip install -r requirements.txt
+pip3 freeze > requirements.txt
+pip3 install -r requirements.txt
 
 ## setup
 

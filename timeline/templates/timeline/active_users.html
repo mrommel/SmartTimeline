@@ -1,0 +1,266 @@
+{% extends "generic.html" %}
+
+{% load i18n %}
+{% block title %}Active Users{% endblock %}
+
+{% block active_users_active %}active{% endblock %}
+
+{% block styles %}
+	{% load static %}
+	<script src="{% static 'timeline/js/roundrect.js' %}"></script>
+	<script src="{% static 'timeline/js/canvas2svg.js' %}"></script>
+	<style type="text/css">
+		.card-body img.app_icon {
+			width: 18px;
+			height: 18px;
+			vertical-align: middle;
+		}
+		.card-ratings .card-header .dropdown {
+    		float: right;
+    		color: #ccc;
+		}
+		.card-ratings .card-header .title {
+    		margin-right: 20px;
+		}
+		.positive {
+			color: green;
+		}
+		.positive::before {
+			content:'+'
+		}
+		.negative {
+			color: red;
+		}
+		.normal {
+			color: yellow;
+		}
+		.star-ratings {
+		  	unicode-bidi: bidi-override;
+		  	color: #ccc;
+		  	font-size: 20px;
+		  	position: relative;
+		  	margin: 0;
+		  	padding: 0;
+		}
+		.star-ratings .fill-ratings {
+		  	color: #FFDF00;
+		  	padding: 0;
+		  	position: absolute;
+		  	z-index: 1;
+		  	display: block;
+		  	top: 0;
+		  	left: 0;
+		  	overflow: hidden;
+		}
+		.star-ratings .fill-ratings span {
+		  	display: inline-block;
+		}
+		.star-ratings .empty-ratings {
+		  	padding: 0;
+		  	display: block;
+		  	z-index: 0;
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+
+		<div class="col-md-12">
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users" %}</h4>
+					<div class="dropdown">
+                  		<button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown" aria-expanded="false">
+                   			 <i class="tim-icons icon-settings-gear-63"></i>
+                  		</button>
+                  		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; transform: translate3d(-122px, 22px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    		<a class="dropdown-item" href="#" onclick="toggleMarkers();return false;">{% trans "Toggle Markers" %}</a>
+							<a class="dropdown-item" href="#" onclick="exportAsSVG();return false;">{% trans "Export SVG" %}</a>
+                  		</div>
+                	</div>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+	{% load static %}
+	<script src="{% static 'timeline/js/Chart.min.js' %}"></script>
+	<script src="{% static 'timeline/js/Chart.labels.js' %}"></script>
+
+<script>
+	var ratingsLabels = [{% for timeline_item in chart_data.timeline %}'{{ timeline_item }}', {% endfor %}];
+
+	var config = {
+		type: 'bar',
+		data: {
+			labels: ratingsLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			plugins: {
+				title: {
+					display: true,
+					text: '{% trans "Active users of FRITZ!Apps" %}',
+					fontSize: 27,
+					fontStyle: 'normal'
+				},
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'Monat'
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'Anzahl der aktiven Nutzer'
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				}
+			}
+		}
+	};
+
+	{% for dataset in chart_data.datasets %}
+
+		if ('{{ dataset.name }}'.includes('MyFRITZ')) {
+			var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
+			};
+			config.data.datasets.push(dataset{{ forloop.counter0 }});
+		}
+	{% endfor %}
+
+	function toggleMarkers() {
+		// config.options.markers.display = !config.options.markers.display;
+		// ratingChart.chart.update();
+	}
+
+	function tweakLib(){
+  		C2S.prototype.getContext = function (contextId) {
+			if (contextId=="2d" || contextId=="2D") {
+				return this;
+			}
+			return null;
+		}
+
+		C2S.prototype.style = function () {
+			return this.__canvas.style
+		}
+
+		C2S.prototype.getAttribute = function (name) {
+			return this[name];
+		}
+
+		C2S.prototype.addEventListener =  function(type, listener, eventListenerOptions) {
+			// console.log("canvas2svg.addEventListener() not implemented.")
+		}
+	}
+
+	function exportAsSVG() {
+
+		// Create canvas2svg 'fake' context
+		var svgContext = C2S(1460, 856);
+
+		tweakLib();
+		// deactivate responsiveness and animation
+		config.options.responsive = false;
+		config.options.animation = false;
+
+		// fix scale issue
+		const getDevicePixelRatio = window.devicePixelRatio
+		window.devicePixelRatio = 1;
+
+		// new chart on 'fake' context fails:
+		var mySvg = new Chart(svgContext, config);
+
+		// svgContext.fillStyle="#27293d";
+		// svgContext.fillRect(0,0,1460,856);
+
+		// restore
+		window.devicePixelRatio = getDevicePixelRatio
+
+		// console.log(svgContext.getSerializedSvg(true));
+		// svgContext.style="background-color:green";
+
+		//set url value to a element's href attribute.
+		var svgData = svgContext.getSerializedSvg(true);
+		var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+		var svgUrl = URL.createObjectURL(svgBlob);
+		var downloadLink = document.createElement("a");
+		downloadLink.href = svgUrl;
+		downloadLink.download = "ratings.svg";
+		downloadLink.click();
+	}
+
+	var usersMyFChart = {};
+
+	window.onload = function() {
+		var ctx = document.getElementById('canvas').getContext('2d');
+		usersMyFChart = new Chart(ctx, config);
+		window.myLine = usersMyFChart;
+
+		// Gets the span width of the filled-ratings span
+  		// this will be the same for each rating
+  		var star_rating_width = $('.fill-ratings span').width();
+  		// Sets the container of the ratings to span width
+  		// thus the percentages in mobile will never be wrong
+  		$('.star-ratings').width(star_rating_width);
+	};
+	</script>
+{% endblock %}

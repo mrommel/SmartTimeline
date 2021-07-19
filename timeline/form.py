@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.widgets import TextInput
+from month.forms import MonthField
 
 from .models import App, Version, SemanticVersion
 
@@ -133,6 +134,62 @@ class AddRatingsForm(forms.Form):
     smart_home_ios = forms.DecimalField(
         max_digits=3,
         decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+
+class AddActiveUsersForm(forms.Form):
+    date = MonthField(
+        label='date'
+    )
+    myf_android = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    myf_ios = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    fon_android = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    fon_ios = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    wlan_android = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    wlan_ios = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    tv_android = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    tv_ios = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    smart_home_android = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    smart_home_ios = forms.IntegerField(
         widget=forms.NumberInput(
             attrs={'class': 'form-control'}
         )

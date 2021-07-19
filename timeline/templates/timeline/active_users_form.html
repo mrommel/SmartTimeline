@@ -1,0 +1,155 @@
+{% extends "generic.html" %}
+
+{% block title %}Active input{% endblock %}
+
+{% block active_user_input_active %}active {% endblock %}
+
+{% block styles %}
+    <style type="text/css">
+        .btn-primary {
+            background: #e14eca;
+            background-image: linear-gradient(to bottom left,#1d8cf8,#11cdef,#1d8cf8);
+            background-size: 210% 210%;
+            background-position: 100% 0;
+            background-color: #1d8cf8;
+            transition: all .15s ease;
+            box-shadow: none;
+            color: #fff;
+        }
+       </style>
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="title">Add Active Users</h5>
+                </div>
+
+                <form action="/timeline/active_users/add/" method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-12 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.date.errors }}
+                                    <label for="{{ form.date.id_for_label }}">Date</label>
+                                    {{ form.date }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.myf_android.errors }}
+                                    <label for="{{ form.myf_android.id_for_label }}">MyFRITZ!App Android</label>
+                                    {{ form.myf_android }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    {{ form.myf_ios.errors }}
+                                    <label for="{{ form.myf_ios.id_for_label }}">MyFRITZ!App iOS</label>
+                                    {{ form.myf_ios }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.fon_android.errors }}
+                                    <label for="{{ form.fon_android.id_for_label }}">FRITZ!App Fon Android</label>
+                                    {{ form.fon_android }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    {{ form.fon_ios.errors }}
+                                    <label for="{{ form.fon_ios.id_for_label }}">FRITZ!App Fon iOS</label>
+                                    {{ form.fon_ios }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.wlan_android.errors }}
+                                    <label for="{{ form.wlan_android.id_for_label }}">FRITZ!App WLAN Android</label>
+                                    {{ form.wlan_android }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    {{ form.wlan_ios.errors }}
+                                    <label for="{{ form.wlan_ios.id_for_label }}">FRITZ!App WLAN iOS</label>
+                                    {{ form.wlan_ios }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.tv_android.errors }}
+                                    <label for="{{ form.tv_android.id_for_label }}">FRITZ!App TV Android</label>
+                                    {{ form.tv_android }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    {{ form.tv_ios.errors }}
+                                    <label for="{{ form.tv_ios.id_for_label }}">FRITZ!App TV iOS</label>
+                                    {{ form.tv_ios }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    {{ form.smart_home_android.errors }}
+                                    <label for="{{ form.smart_home_android.id_for_label }}">FRITZ!App Smart Home Android</label>
+                                    {{ form.smart_home_android }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    {{ form.smart_home_ios.errors }}
+                                    <label for="{{ form.smart_home_ios.id_for_label }}">FRITZ!App Smart Home iOS</label>
+                                    {{ form.smart_home_ios }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-fill btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="title"></h5>
+                </div>
+
+                <div class="card-body">
+					<img src="{% static 'timeline/img/reviews.svg' %}" />
+				</div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

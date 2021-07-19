@@ -50,7 +50,7 @@
             			MiRo
           			</a>
           			<a href="javascript:void(0)" class="simple-text logo-normal">
-            			{% trans "Dashboard" %}
+            			{% trans "dashboard" %}
           			</a>
         		</div>
         		
@@ -58,19 +58,19 @@
           			<li class="{% block dashboard_active %} {% endblock %}">
            				<a href="/timeline/dashboard">
               				<i class="tim-icons icon-bullet-list-67"></i>
-              				<p>{% trans "Dashboard" %}</p>
+              				<p>{% trans "dashboard" %}</p>
             			</a>
           			</li>
 					<li class="{% block apps_active %} {% endblock %}">
             			<a href="/timeline/apps/">
               				<i class="tim-icons icon-app"></i>
-              				<p>{% trans "Apps" %}</p>
+              				<p>{% trans "apps" %}</p>
             			</a>
           			</li>
           			<li class="{% block releases_active %} {% endblock %}">
             			<a href="/timeline/releases/">
               				<i class="tim-icons icon-spaceship"></i>
-              				<p>{% trans "Releases" %}</p>
+              				<p>{% trans "releases" %}</p>
             			</a>
           			</li>
 					<li class="{% block release_input_active %} {% endblock %}">
@@ -83,19 +83,32 @@
           			<li class="{% block ratings_active %} {% endblock %}">
             			<a href="/timeline/ratings/">
               				<i class="tim-icons icon-chart-bar-32"></i>
-              				<p>{% trans "All Ratings" %}</p>
+              				<p>{% trans "all ratings" %}</p>
             			</a>
           			</li>
 					<li class="{% block last_ratings_active %} {% endblock %}">
             			<a href="/timeline/lastratings/">
               				<i class="tim-icons icon-chart-bar-32"></i>
-              				<p>{% trans "Ratings of last 2 month" %}</p>
+              				<p>{% trans "ratings of last 2 month" %}</p>
             			</a>
           			</li>
 					<li class="{% block rating_input_active %} {% endblock %}">
 						<a href="/timeline/ratings/add">
 							<i class="tim-icons icon-simple-add"></i>
-              				<p>{% trans "add Rating" %}</p>
+              				<p>{% trans "add rating" %}</p>
+						</a>
+					</li>
+
+					<li class="{% block active_users_active %} {% endblock %}">
+            			<a href="/timeline/active_users/">
+              				<i class="tim-icons icon-chart-bar-32"></i>
+              				<p>{% trans "active users" %}</p>
+            			</a>
+          			</li>
+					<li class="{% block active_user_input_active %} {% endblock %}">
+						<a href="/timeline/active_users/add/">
+							<i class="tim-icons icon-simple-add"></i>
+              				<p>{% trans "add active users" %}</p>
 						</a>
 					</li>
 				</ul>
@@ -104,7 +117,7 @@
           			<li class="{% block roadmap_active %} {% endblock %}">
             			<a href="/roadmap">
               				<i class="tim-icons icon-settings"></i>
-              				<p>{% trans "Roadmaps" %}</p>
+              				<p>{% trans "roadmaps" %}</p>
             			</a>
           			</li>
         		</ul>
@@ -114,7 +127,7 @@
           			<li>
             			<a href="/admin" target="_BLANK">
               				<i class="tim-icons icon-settings"></i>
-              				<p>{% trans "Admin" %}</p>
+              				<p>{% trans "admin" %}</p>
             			</a>
           			</li>
         		</ul>
