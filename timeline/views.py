@@ -451,8 +451,23 @@ def active_users(request):
         :param request: request
         :return: response
         """
-    app_list = App.objects.all
+    app_list = App.objects.all()
     chart_data = ChartData()
+
+    for app in app_list:
+        current_users_val = app.current_users().users
+        last_month_users_val = app.last_month_users().users
+        twelve_month_users_val = app.twelve_month_ago_users().users
+
+        last_month_value = 100.0 - float(int(last_month_users_val / current_users_val * 10000.0)) / 100.0
+        app.delta_last_month = "{:.2f}".format(last_month_value)
+        if last_month_value > 0:
+            app.delta_last_month = '+%s' % app.delta_last_month
+
+        last_year_value = 100.0 - float(int(twelve_month_users_val / current_users_val * 10000.0)) / 100.0
+        app.delta_last_year = "{:.2f}".format(last_year_value)
+        if last_year_value > 0:
+            app.delta_last_year = '+%s' % app.delta_last_year
 
     # get all dates
     for active_user in ActiveUsers.objects.order_by('date'):

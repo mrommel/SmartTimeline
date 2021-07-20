@@ -87,6 +87,22 @@ class App(models.Model):
 
         return 0.0
 
+    def current_users(self):
+
+        return ActiveUsers.objects.filter(app=self).latest('date')
+
+    def last_month_users(self):
+
+        all_users = ActiveUsers.objects.filter(app=self).order_by('date')
+        last_month = month_delta(date.today(), -3)
+        return next((x for x in all_users if x.date > last_month), None)
+
+    def twelve_month_ago_users(self):
+
+        all_users = ActiveUsers.objects.filter(app=self).order_by('date')
+        last_month = month_delta(date.today(), -14)
+        return next((x for x in all_users if x.date > last_month), None)
+
     # ...
     def __str__(self):
         return self.name

@@ -36,7 +36,30 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_current" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_current" style="background-color:#27293d;" width="1460" height="500"></canvas>
+
+					<div class="table-responsive">
+						<table class="table tablesorter " id="">
+							<thead class=" text-primary">
+								<tr>
+									<th>App</th>
+									<th>Nutzer</th>
+									<th>Vormonat</th>
+									<th>Vorjahr</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for app in app_list %}
+									<tr>
+										<td><img src="/static/timeline/img/apps/{{ app.name }}.png" class="app_icon" />&nbsp;&nbsp;<a href="/timeline/apps/{{ app.id }}/">{{ app.name }}</a></td>
+										<td>{{ app.current_users.users|cut:"0.00" }}</td>
+										<td>{{ app.last_month_users.users|cut:"0.00" }} ({{ app.delta_last_month|cut:"0.00" }}%)</td>
+										<td>{{ app.twelve_month_ago_users.users|cut:"0.00" }} ({{ app.delta_last_year|cut:"0.00" }}%)</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 
@@ -46,7 +69,7 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_myf" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_myf" style="background-color:#27293d;" width="1460" height="500"></canvas>
 				</div>
 			</div>
 
@@ -56,7 +79,7 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_fon" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_fon" style="background-color:#27293d;" width="1460" height="500"></canvas>
 				</div>
 			</div>
 
@@ -66,7 +89,7 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_wlan" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_wlan" style="background-color:#27293d;" width="1460" height="500"></canvas>
 				</div>
 			</div>
 
@@ -76,7 +99,7 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_smart" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_smart" style="background-color:#27293d;" width="1460" height="500"></canvas>
 				</div>
 			</div>
 
@@ -279,14 +302,6 @@
 		},
 		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
 		options: {
-			plugins: {
-				title: {
-					display: true,
-					text: '{% trans "active users of the" %} FRITZ!App Fon',
-					fontSize: 27,
-					fontStyle: 'normal'
-				},
-			},
 			tooltips: {
 				mode: 'index',
 				intersect: false,
@@ -299,9 +314,13 @@
 				x: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "month" %}'
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
 					},
 					grid: {
 						display: false,
@@ -311,9 +330,10 @@
 				y: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "number of active users" %}'
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
 					},
 					grid: {
 						color: '#eeeeee55'
@@ -321,7 +341,8 @@
 					min: 0,
 					max: 1600000,
 					ticks: {
-          				stepSize: 100000
+          				stepSize: 100000,
+          				color: '#fff',
 					}
 				}
 			},
@@ -332,6 +353,24 @@
 					labels: {
 						color: '#fff'
 					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App Fon',
+					font: {
+						size: 27,
+						weight: 'normal',
+						family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+						return '#00000088';
+					},
+					borderRadius: 4,
+					color: '#fff',
+					padding: 1,
 				}
 			}
 		}
@@ -344,14 +383,6 @@
 		},
 		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
 		options: {
-			plugins: {
-				title: {
-					display: true,
-					text: '{% trans "active users of the" %} FRITZ!App WLAN',
-					fontSize: 27,
-					fontStyle: 'normal'
-				},
-			},
 			tooltips: {
 				mode: 'index',
 				intersect: false,
@@ -364,9 +395,13 @@
 				x: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "month" %}'
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
 					},
 					grid: {
 						display: false,
@@ -376,9 +411,10 @@
 				y: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "number of active users" %}'
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
 					},
 					grid: {
 						color: '#eeeeee55'
@@ -386,7 +422,8 @@
 					min: 0,
 					max: 1600000,
 					ticks: {
-          				stepSize: 100000
+          				stepSize: 100000,
+          				color: '#fff',
 					}
 				}
 			},
@@ -397,6 +434,24 @@
 					labels: {
 						color: '#fff'
 					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App WLAN',
+					font: {
+						size: 27,
+						weight: 'normal',
+						family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+						return '#00000088';
+					},
+					borderRadius: 4,
+					color: '#fff',
+					padding: 1,
 				}
 			}
 		}
@@ -409,14 +464,6 @@
 		},
 		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
 		options: {
-			plugins: {
-				title: {
-					display: true,
-					text: '{% trans "active users of the" %} FRITZ!App Smart Home',
-					fontSize: 27,
-					fontStyle: 'normal'
-				},
-			},
 			tooltips: {
 				mode: 'index',
 				intersect: false,
@@ -429,9 +476,13 @@
 				x: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "month" %}'
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
 					},
 					grid: {
 						display: false,
@@ -441,9 +492,10 @@
 				y: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "number of active users" %}'
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
 					},
 					grid: {
 						color: '#eeeeee55'
@@ -451,7 +503,8 @@
 					min: 0,
 					max: 1600000,
 					ticks: {
-          				stepSize: 100000
+          				stepSize: 100000,
+          				color: '#fff',
 					}
 				}
 			},
@@ -462,6 +515,24 @@
 					labels: {
 						color: '#fff'
 					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App Smart Home',
+					font: {
+						size: 27,
+						weight: 'normal',
+						family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+						return '#00000088';
+					},
+					borderRadius: 4,
+					color: '#fff',
+					padding: 1,
 				}
 			}
 		}
@@ -474,14 +545,6 @@
 		},
 		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
 		options: {
-			plugins: {
-				title: {
-					display: true,
-					text: '{% trans "active users of the" %} FRITZ!App TV',
-					fontSize: 27,
-					fontStyle: 'normal'
-				},
-			},
 			tooltips: {
 				mode: 'index',
 				intersect: false,
@@ -494,9 +557,13 @@
 				x: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "month" %}'
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
 					},
 					grid: {
 						display: false,
@@ -506,9 +573,10 @@
 				y: {
 					stacked: true,
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
-						labelString: '{% trans "number of active users" %}'
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
 					},
 					grid: {
 						color: '#eeeeee55'
@@ -516,7 +584,8 @@
 					min: 0,
 					max: 1600000,
 					ticks: {
-          				stepSize: 100000
+          				stepSize: 100000,
+          				color: '#fff',
 					}
 				}
 			},
@@ -527,6 +596,24 @@
 					labels: {
 						color: '#fff'
 					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App TV',
+					font: {
+						size: 27,
+						weight: 'normal',
+						family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+						return '#00000088';
+					},
+					borderRadius: 4,
+					color: '#fff',
+					padding: 1,
 				}
 			}
 		}
