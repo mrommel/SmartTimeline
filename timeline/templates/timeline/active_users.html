@@ -22,44 +22,6 @@
 		.card-ratings .card-header .title {
     		margin-right: 20px;
 		}
-		.positive {
-			color: green;
-		}
-		.positive::before {
-			content:'+'
-		}
-		.negative {
-			color: red;
-		}
-		.normal {
-			color: yellow;
-		}
-		.star-ratings {
-		  	unicode-bidi: bidi-override;
-		  	color: #ccc;
-		  	font-size: 20px;
-		  	position: relative;
-		  	margin: 0;
-		  	padding: 0;
-		}
-		.star-ratings .fill-ratings {
-		  	color: #FFDF00;
-		  	padding: 0;
-		  	position: absolute;
-		  	z-index: 1;
-		  	display: block;
-		  	top: 0;
-		  	left: 0;
-		  	overflow: hidden;
-		}
-		.star-ratings .fill-ratings span {
-		  	display: inline-block;
-		}
-		.star-ratings .empty-ratings {
-		  	padding: 0;
-		  	display: block;
-		  	z-index: 0;
-		}
 	</style>
 {% endblock %}
 
@@ -70,20 +32,61 @@
 
 			<div class="card card-ratings">
 				<div class="card-header">
-					<h4 class="card-title title d-inline">{% trans "active users" %}</h4>
-					<div class="dropdown">
-                  		<button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown" aria-expanded="false">
-                   			 <i class="tim-icons icon-settings-gear-63"></i>
-                  		</button>
-                  		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; transform: translate3d(-122px, 22px, 0px); top: 0px; left: 0px; will-change: transform;">
-                    		<a class="dropdown-item" href="#" onclick="toggleMarkers();return false;">{% trans "Toggle Markers" %}</a>
-							<a class="dropdown-item" href="#" onclick="exportAsSVG();return false;">{% trans "Export SVG" %}</a>
-                  		</div>
-                	</div>
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} FRITZ!Apps</h4>
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas" style="background-color: #27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_current" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} MyFRITZ!App</h4>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas_myf" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} FRITZ!App Fon</h4>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas_fon" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} FRITZ!App WLAN</h4>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas_wlan" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} FRITZ!App Smart Home</h4>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas_smart" style="background-color: #27293d;" width="1460" height="500"></canvas>
+				</div>
+			</div>
+
+			<div class="card card-ratings">
+				<div class="card-header">
+					<h4 class="card-title title d-inline">{% trans "active users of the" %} FRITZ!App TV</h4>
+				</div>
+
+				<div class="card-body">
+					<canvas id="canvas_tv" style="background-color: #27293d;" width="1460" height="500"></canvas>
 				</div>
 			</div>
 
@@ -101,8 +104,174 @@
 
 <script>
 	var ratingsLabels = [{% for timeline_item in chart_data.timeline %}'{{ timeline_item }}', {% endfor %}];
+	{% with chart_data.timeline|last as last %}
+    var currentLabels = ['{{ last }}', ];
+    var currentText = '{{ last }}';
+	{% endwith %}
 
-	var config = {
+	var config_current = {
+		type: 'bar',
+		data: {
+			labels: currentLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					title: {
+						display: true,
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					title: {
+						display: true,
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000,
+          				color: '#fff',
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!Apps in ' + currentText,
+					font: {
+					  	size: 27,
+					  	weight: 'normal',
+					  	family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+          				return '#00000088';
+        			},
+        			borderRadius: 4,
+					color: '#fff',
+					padding: 1,
+				}
+			}
+		}
+	};
+	var config_myf = {
+		type: 'bar',
+		data: {
+			labels: ratingsLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					title: {
+						display: true,
+						text: '{% trans "month" %}',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#fff',
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					title: {
+						display: true,
+						text: '{% trans "number of active users" %}',
+						color: '#fff',
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000,
+          				color: '#fff',
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				},
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} MyFRITZ!App',
+					font: {
+						size: 27,
+						weight: 'normal',
+						family: 'Poppins,sans-serif',
+					},
+					color: '#fff',
+				},
+				datalabels: {
+					backgroundColor: function(context) {
+						return '#00000088';
+					},
+					borderRadius: 4,
+					color: '#fff',
+					padding: 1,
+				}
+			}
+		}
+	};
+	var config_fon = {
 		type: 'bar',
 		data: {
 			labels: ratingsLabels,
@@ -113,7 +282,7 @@
 			plugins: {
 				title: {
 					display: true,
-					text: '{% trans "Active users of FRITZ!Apps" %}',
+					text: '{% trans "active users of the" %} FRITZ!App Fon',
 					fontSize: 27,
 					fontStyle: 'normal'
 				},
@@ -132,7 +301,7 @@
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'Monat'
+						labelString: '{% trans "month" %}'
 					},
 					grid: {
 						display: false,
@@ -144,7 +313,202 @@
 					display: true,
 					scaleLabel: {
 						display: true,
-						labelString: 'Anzahl der aktiven Nutzer'
+						labelString: '{% trans "number of active users" %}'
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				}
+			}
+		}
+	};
+	var config_wlan = {
+		type: 'bar',
+		data: {
+			labels: ratingsLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			plugins: {
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App WLAN',
+					fontSize: 27,
+					fontStyle: 'normal'
+				},
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "month" %}'
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "number of active users" %}'
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				}
+			}
+		}
+	};
+	var config_smart = {
+		type: 'bar',
+		data: {
+			labels: ratingsLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			plugins: {
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App Smart Home',
+					fontSize: 27,
+					fontStyle: 'normal'
+				},
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "month" %}'
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "number of active users" %}'
+					},
+					grid: {
+						color: '#eeeeee55'
+					},
+					min: 0,
+					max: 1600000,
+					ticks: {
+          				stepSize: 100000
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				}
+			}
+		}
+	};
+	var config_tv = {
+		type: 'bar',
+		data: {
+			labels: ratingsLabels,
+			datasets: []
+		},
+		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		options: {
+			plugins: {
+				title: {
+					display: true,
+					text: '{% trans "active users of the" %} FRITZ!App TV',
+					fontSize: 27,
+					fontStyle: 'normal'
+				},
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				x: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "month" %}'
+					},
+					grid: {
+						display: false,
+						color: '#eeeeee55'
+					},
+				},
+				y: {
+					stacked: true,
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: '{% trans "number of active users" %}'
 					},
 					grid: {
 						color: '#eeeeee55'
@@ -169,6 +533,36 @@
 	};
 
 	{% for dataset in chart_data.datasets %}
+		var stack = 'stack 0';
+		if ('{{ dataset.name }}'.includes('MyFRITZ')) {
+			stack = 'myfritz';
+		}
+		if ('{{ dataset.name }}'.includes('Fon')) {
+			stack = 'fon';
+		}
+		if ('{{ dataset.name }}'.includes('WLAN')) {
+			stack = 'wlan';
+		}
+		if ('{{ dataset.name }}'.includes('Smart')) {
+			stack = 'smart';
+		}
+		if ('{{ dataset.name }}'.includes('TV')) {
+			stack = 'tv';
+		}
+
+		var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% with dataset.data|last as last %}{{ last }}{% endwith %}],
+				stack: stack,
+			};
+		config_current.data.datasets.push(dataset{{ forloop.counter0 }});
 
 		if ('{{ dataset.name }}'.includes('MyFRITZ')) {
 			var dataset{{ forloop.counter0 }} =  {
@@ -182,7 +576,63 @@
 				fill: false,
 				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
 			};
-			config.data.datasets.push(dataset{{ forloop.counter0 }});
+			config_myf.data.datasets.push(dataset{{ forloop.counter0 }});
+		}
+		if ('{{ dataset.name }}'.includes('Fon')) {
+			var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
+			};
+			config_fon.data.datasets.push(dataset{{ forloop.counter0 }});
+		}
+		if ('{{ dataset.name }}'.includes('WLAN')) {
+			var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
+			};
+			config_wlan.data.datasets.push(dataset{{ forloop.counter0 }});
+		}
+		if ('{{ dataset.name }}'.includes('Smart')) {
+			var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
+			};
+			config_smart.data.datasets.push(dataset{{ forloop.counter0 }});
+		}
+		if ('{{ dataset.name }}'.includes('TV')) {
+			var dataset{{ forloop.counter0 }} =  {
+				label: '{{ dataset.name }}',
+				backgroundColor: '{{ dataset.color }}',
+				borderColor: '{{ dataset.color }}',
+				{% if dataset.solid %}
+				{% else %}
+				borderDash: [5, 5],
+				{% endif %}
+				fill: false,
+				data: [ {% for item in dataset.data %}{{ item|cut:"0.00" }}, {% endfor %}],
+			};
+			config_tv.data.datasets.push(dataset{{ forloop.counter0 }});
 		}
 	{% endfor %}
 
@@ -214,53 +664,40 @@
 
 	function exportAsSVG() {
 
-		// Create canvas2svg 'fake' context
-		var svgContext = C2S(1460, 856);
-
-		tweakLib();
-		// deactivate responsiveness and animation
-		config.options.responsive = false;
-		config.options.animation = false;
-
-		// fix scale issue
-		const getDevicePixelRatio = window.devicePixelRatio
-		window.devicePixelRatio = 1;
-
-		// new chart on 'fake' context fails:
-		var mySvg = new Chart(svgContext, config);
-
-		// svgContext.fillStyle="#27293d";
-		// svgContext.fillRect(0,0,1460,856);
-
-		// restore
-		window.devicePixelRatio = getDevicePixelRatio
-
-		// console.log(svgContext.getSerializedSvg(true));
-		// svgContext.style="background-color:green";
-
-		//set url value to a element's href attribute.
-		var svgData = svgContext.getSerializedSvg(true);
-		var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
-		var svgUrl = URL.createObjectURL(svgBlob);
-		var downloadLink = document.createElement("a");
-		downloadLink.href = svgUrl;
-		downloadLink.download = "ratings.svg";
-		downloadLink.click();
+		console.log("export svg");
 	}
 
+	var usersCurrentChart = {};
 	var usersMyFChart = {};
+	var usersFonChart = {};
+	var usersWLANChart = {};
+	var usersSmartChart = {};
+	var usersTVChart = {};
 
 	window.onload = function() {
-		var ctx = document.getElementById('canvas').getContext('2d');
-		usersMyFChart = new Chart(ctx, config);
-		window.myLine = usersMyFChart;
+		var ctx_current = document.getElementById('canvas_current').getContext('2d');
+		usersCurrentChart = new Chart(ctx_current, config_current);
+		// window.myLine = usersCurrentChart;
 
-		// Gets the span width of the filled-ratings span
-  		// this will be the same for each rating
-  		var star_rating_width = $('.fill-ratings span').width();
-  		// Sets the container of the ratings to span width
-  		// thus the percentages in mobile will never be wrong
-  		$('.star-ratings').width(star_rating_width);
+		var ctx_myf = document.getElementById('canvas_myf').getContext('2d');
+		usersMyFChart = new Chart(ctx_myf, config_myf);
+		// window.myLine = usersMyFChart;
+
+		var ctx_fon = document.getElementById('canvas_fon').getContext('2d');
+		usersFonChart = new Chart(ctx_fon, config_fon);
+		// window.myLine = usersFonChart;
+
+		var ctx_wlan = document.getElementById('canvas_wlan').getContext('2d');
+		usersWLANChart = new Chart(ctx_wlan, config_wlan);
+		// window.myLine = usersWLANChart;
+
+		var ctx_smart = document.getElementById('canvas_smart').getContext('2d');
+		usersSmartChart = new Chart(ctx_smart, config_smart);
+		// window.myLine = usersSmartChart;
+
+		var ctx_tv = document.getElementById('canvas_tv').getContext('2d');
+		usersTVChart = new Chart(ctx_tv, config_tv);
+		// window.myLine = usersTVChart;
 	};
 	</script>
 {% endblock %}
