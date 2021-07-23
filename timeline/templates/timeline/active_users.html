@@ -138,7 +138,7 @@
 			labels: currentLabels,
 			datasets: []
 		},
-		plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
+		plugins: [ChartDataLabels /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */],
 		options: {
 			tooltips: {
 				mode: 'index',
@@ -209,6 +209,38 @@
         			borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+				}
+			},
+			animation: {
+      			duration: 1,
+				onComplete: function() {
+					var chartInstance = usersCurrentChart; //this.chart;
+					var ctx = chartInstance.ctx;
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'bottom';
+
+					var sums = [0, 0, 0, 0, 0];
+					this.data.datasets.forEach(function(dataset, i) {
+						console.log('bar' + dataset.stack);
+						dataset.data.forEach(function(bar, index) {
+							var data = dataset.data[index];
+							if (dataset.stack == 'tv') {
+								sums[4] += data;
+							} else if (dataset.stack == 'smart') {
+								sums[3] += data;
+							} else if (dataset.stack == 'wlan') {
+								sums[2] += data;
+							} else if (dataset.stack == 'fon') {
+								sums[1] += data;
+							} else if (dataset.stack == 'myfritz') {
+								sums[0] += data;
+							}
+						});
+					});
+					sums.forEach(function(v, i) {
+						ctx.fillStyle = "#fff";
+						ctx.fillText(v, (i*185) + 300, 60);
+					});
 				}
 			}
 		}
