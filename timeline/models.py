@@ -87,6 +87,10 @@ class App(models.Model):
 
         return 0.0
 
+    def active_users(self):
+
+        return ActiveUsers.objects.filter(app=self).order_by('date')
+
     def current_users(self):
 
         return ActiveUsers.objects.filter(app=self).latest('date')

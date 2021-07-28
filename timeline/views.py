@@ -247,6 +247,7 @@ def ratings(request):
         chart_dataset = ChartDataset(app_val.name, app_val.color, app_val.solid)
         for _ in chart_data.timeline:
             chart_dataset.data.append('0.00')
+            chart_dataset.delta.append('0.00')
 
         chart_data.datasets.append(chart_dataset)
 
@@ -484,6 +485,7 @@ def active_users(request):
         chart_dataset = ChartDataset(app_val.name, app_val.color, app_val.solid)
         for _ in chart_data.timeline:
             chart_dataset.data.append('0.00')
+            chart_dataset.delta.append('0.00')
 
         chart_data.datasets.append(chart_dataset)
 
@@ -491,10 +493,18 @@ def active_users(request):
     for active_user in ActiveUsers.objects.order_by('date'):
         try:
             index_val = chart_data.timeline.index(active_user.date)
+            previous_active_users = None
+            if index_val > 0:
+                previous_active_users = active_user.app.active_users()[index_val - 1]
+            previous_val = active_user.users
+
+            if previous_active_users is not None:
+                previous_val = previous_active_users.users
 
             dataset = next((x for x in chart_data.datasets if x.name == active_user.app.name), None)
             if dataset is not None:
                 dataset.data[index_val] = active_user.users
+                dataset.delta[index_val] = active_user.users - previous_val # not valid
         except ValueError:
             pass
 

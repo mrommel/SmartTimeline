@@ -50,6 +50,7 @@ class ChartDataset:
         self.color = color
         self.solid = solid
         self.data = []
+        self.delta = [] # absolute, to previous month
 
 
 class ChartMarker:
@@ -72,6 +73,13 @@ class ChartData:
         self.timeline = []
         self.datasets = []
         self.markers = []
+
+    def named(self, name):
+        for dataset_item in self.datasets:
+            if dataset_item.name == name:
+                return dataset_item
+
+        return None
 
 
 def prev_two_month(date_value=datetime.today()):

@@ -22,6 +22,9 @@
 		.card-ratings .card-header .title {
     		margin-right: 20px;
 		}
+		.table>tbody>tr>td {
+			padding: 6px 7px;
+		}
 	</style>
 {% endblock %}
 
@@ -70,6 +73,81 @@
 
 				<div class="card-body">
 					<canvas id="canvas_myf" style="background-color:#27293d;" width="1460" height="500"></canvas>
+
+					<div class="table-responsive">
+						<table class="table tablesorter ">
+							<thead class=" text-primary">
+								<tr>
+									<th>Month</th>
+									<th>Active users Android</th>
+									<th>Delta zum Vormonat</th>
+									<th>Active users iOS</th>
+									<th>Delta zum Vormonat</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								{% for timeline_item in chart_data.timeline reversed %}
+									{% with index=forloop.counter0 %}
+										<tr>
+											<td>{{ timeline_item }}</td>
+											{% with dataset=chart_data.datasets.0 %}
+												<td>
+													{% for data_item in dataset.data reversed %}
+														{% if index == forloop.counter0 %}
+															{{ data_item }}
+														{% endif %}
+													{% endfor %}
+												</td>
+												<td>
+													{% for data_item in dataset.delta reversed %}
+														{% if index == forloop.counter0 %}
+															{{ data_item }}
+														{% endif %}
+													{% endfor %}
+												</td>
+											{% endwith %}
+
+											{% with dataset=chart_data.datasets.1 %}
+												<td>
+													{% for data_item in dataset.data reversed %}
+														{% if index == forloop.counter0 %}
+															{{ data_item }}
+														{% endif %}
+													{% endfor %}
+												</td>
+												<td>
+													{% for data_item in dataset.delta reversed %}
+														{% if index == forloop.counter0 %}
+															{{ data_item }}
+														{% endif %}
+													{% endfor %}
+												</td>
+											{% endwith %}
+										</tr>
+									{% endwith %}
+								{% endfor %}
+
+									<!--
+									{% for dataset in chart_data.datasets %}
+										{% if dataset.name == "MyFRITZ!App Android" %}
+											{% for item in dataset.data %}
+												<td>{{ item|cut:"0.00" }}<br />(delta)</td>
+											{% endfor %}
+										{% endif %}
+									{% endfor %}
+
+									{% for dataset in chart_data.datasets %}
+										{% if dataset.name == "MyFRITZ!App iOS" %}
+											{% for item in dataset.data %}
+												<td>{{ item|cut:"0.00" }}<br />(delta)</td>
+											{% endfor %}
+										{% endif %}
+									{% endfor %}
+									-->
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 
@@ -209,6 +287,10 @@
         			borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			},
 			animation: {
@@ -239,7 +321,8 @@
 					});
 					sums.forEach(function(v, i) {
 						ctx.fillStyle = "#fff";
-						ctx.fillText(v, (i*185) + 300, 60);
+						var text = v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+						ctx.fillText(text, (i*185) + 300, 60);
 					});
 				}
 			}
@@ -322,6 +405,10 @@
 					borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			}
 		}
@@ -403,6 +490,10 @@
 					borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			}
 		}
@@ -484,6 +575,10 @@
 					borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			}
 		}
@@ -533,9 +628,9 @@
 						color: '#eeeeee55'
 					},
 					min: 0,
-					max: 1600000,
+					max: 200000,
 					ticks: {
-          				stepSize: 100000,
+          				stepSize: 25000,
           				color: '#fff',
 					}
 				}
@@ -565,6 +660,10 @@
 					borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			}
 		}
@@ -614,9 +713,9 @@
 						color: '#eeeeee55'
 					},
 					min: 0,
-					max: 1600000,
+					max: 200000,
 					ticks: {
-          				stepSize: 100000,
+          				stepSize: 25000,
           				color: '#fff',
 					}
 				}
@@ -646,6 +745,10 @@
 					borderRadius: 4,
 					color: '#fff',
 					padding: 1,
+					formatter: function(value, context) {
+						// print label with thousands separator
+          				return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        			}
 				}
 			}
 		}
