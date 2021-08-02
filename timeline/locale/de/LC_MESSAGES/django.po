@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-28 15:27+0000\n"
-"PO-Revision-Date: 2021-01-28 16:28+0100\n"
+"POT-Creation-Date: 2021-08-02 09:27+0000\n"
+"PO-Revision-Date: 2021-08-02 11:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -38,21 +38,26 @@ msgstr "Minor"
 msgid "Patch"
 msgstr "Patch"
 
-#: models.py:117
+#: models.py:137
 #, python-format
 msgid "Rating of %s at %s"
 msgstr "Bewertung von %s am %s"
 
+#: models.py:146
+#, python-format
+msgid "Number of Users of %s at %s"
+msgstr "Anzahl der Nutzer der %s am %s"
+
 #: templates/generic.html:53 templates/generic.html:61
-msgid "Dashboard"
+msgid "dashboard"
 msgstr "Dashboard"
 
 #: templates/generic.html:67
-msgid "Apps"
+msgid "apps"
 msgstr "Apps"
 
 #: templates/generic.html:73
-msgid "Releases"
+msgid "releases"
 msgstr "Veröffentlichungen"
 
 #: templates/generic.html:79
@@ -60,24 +65,68 @@ msgid "add Release"
 msgstr "Veröffentlichung hinzufügen"
 
 #: templates/generic.html:86
-msgid "All Ratings"
+msgid "all ratings"
 msgstr "Alle Bewertungen"
 
 #: templates/generic.html:92
-msgid "Ratings of last 2 month"
+msgid "ratings of last 2 month"
 msgstr "Bewertungen der letzten 2 Monate"
 
 #: templates/generic.html:98
-msgid "add Rating"
+msgid "add rating"
 msgstr "Bewertung hinzufügen"
 
-#: templates/generic.html:107
-msgid "Roadmaps"
+#: templates/generic.html:105
+msgid "active users"
+msgstr "Aktive Nutzer"
+
+#: templates/generic.html:111
+msgid "add active users"
+msgstr "Aktive Nutzer hinzufügen"
+
+#: templates/generic.html:120
+msgid "roadmaps"
 msgstr "Fahrplan"
 
-#: templates/generic.html:117
-msgid "Admin"
+#: templates/generic.html:130
+msgid "admin"
 msgstr "Admin"
+
+#: templates/timeline/active_users.html:38
+#: templates/timeline/active_users.html:71
+#: templates/timeline/active_users.html:137
+#: templates/timeline/active_users.html:147
+#: templates/timeline/active_users.html:157
+#: templates/timeline/active_users.html:167
+#: templates/timeline/active_users.html:374
+#: templates/timeline/active_users.html:459
+#: templates/timeline/active_users.html:544
+#: templates/timeline/active_users.html:629
+#: templates/timeline/active_users.html:714
+msgid "active users of the"
+msgstr "Aktive Nutzer der"
+
+#: templates/timeline/active_users.html:216
+#: templates/timeline/active_users.html:334
+#: templates/timeline/active_users.html:419
+#: templates/timeline/active_users.html:504
+#: templates/timeline/active_users.html:589
+#: templates/timeline/active_users.html:674
+msgid "month"
+msgstr "Monat"
+
+#: templates/timeline/active_users.html:232
+#: templates/timeline/active_users.html:350
+#: templates/timeline/active_users.html:435
+#: templates/timeline/active_users.html:520
+#: templates/timeline/active_users.html:605
+#: templates/timeline/active_users.html:690
+msgid "number of active users"
+msgstr "Anzahl der aktiven Nutzer"
+
+#: templates/timeline/active_users.html:256
+msgid "active users of the FRITZ!Apps in"
+msgstr "Aktive Nutzer der FRITZ!Apps in"
 
 #: templates/timeline/app.html:33 templates/timeline/ratings.html:74
 #: templates/timeline/ratings.html:99
@@ -132,7 +181,7 @@ msgstr "Vor 6 Monaten (Delta)"
 msgid "12 Month ago (Delta)"
 msgstr "Vor 12 Monaten (Delta)"
 
-#: templates/timeline/ratings.html:191
+#: templates/timeline/ratings.html:181
 msgid "Ratings of FRITZ!Apps"
 msgstr "Bewertungen der FRITZ!Apps"
 
@@ -183,3 +232,6 @@ msgstr "in diesem Jahr"
 #: templates/timeline/releases.html:115
 msgid "Release date"
 msgstr "Veröffentlichungsdatum"
+
+#~ msgid "Apps"
+#~ msgstr "Apps"

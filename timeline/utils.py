@@ -64,6 +64,26 @@ class ChartMarker:
         self.marker = marker
 
 
+class MonthYear:
+    """
+    class that holds the chart data ready to be displayed
+    """
+
+    def __init__(self):
+        self.month = 0
+        self.year = 0
+
+    def __init__(self, month, year):
+        self.month = month
+        self.year = year
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, MonthYear):
+            return self.month == other.month and self.year == other.year
+        return False
+
+
 class ChartData:
     """
     class that holds the chart data ready to be displayed

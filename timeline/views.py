@@ -1,6 +1,9 @@
 import locale
+from collections import defaultdict
 from datetime import date, timezone, datetime
+from operator import itemgetter
 
+from django.db.models import Q
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -10,7 +13,7 @@ from django.utils import translation
 from cms.models import Content
 from .form import AddRatingsForm, AddVersionModelForm, AddActiveUsersForm
 from .models import App, Version, Rating, SemanticVersion, ActiveUsers
-from .utils import first, ChartData, ChartDataset, ChartMarker, prev_two_month
+from .utils import first, ChartData, ChartDataset, ChartMarker, prev_two_month, MonthYear
 
 
 def index(request):
@@ -115,21 +118,21 @@ def releases_redirect(request):
     :param request: request
     :return: response
     """
-    today = date.today()
-
-    response = redirect('/timeline/releases/%d/%d' % (today.month, today.year))
+    response = redirect('/timeline/releases/all')
     return response
 
 
-def releases(request, release_month, release_year):
+def releases_all(request):
     """
-    releases page
+    all releases page
 
-    :param release_month:
-    :param release_year:
     :param request: request
     :return: response
     """
+    today = date.today()
+    release_month = today.month
+    release_year = today.year
+
     app_list = App.objects.all
     release_list = Version.objects.order_by('-pub_date')
 
@@ -139,6 +142,8 @@ def releases(request, release_month, release_year):
     releases_year = 0
 
     last_month = -1
+
+    month_list = []
 
     for release_item in release_list:
 
@@ -160,6 +165,18 @@ def releases(request, release_month, release_year):
 
         last_month = release_item.pub_date.month
 
+    for release_item in Version.objects.all().order_by('-pub_date'):
+
+        month_item = MonthYear(release_item.pub_date.month, release_item.pub_date.year)
+        if month_item not in month_list:
+            month_list.append(month_item)
+
+    temp = defaultdict(list)
+    for item in month_list:
+        temp[item.year].append(item.month)
+
+    month_dict = dict((key, tuple(val)) for key, val in temp.items())
+
     my_date = datetime(release_year, release_month, 1, 4, tzinfo=timezone.utc)
     locale.setlocale(locale.LC_TIME, translation.to_locale(translation.get_language()))
     release_month_str = my_date.strftime("%B")
@@ -174,6 +191,82 @@ def releases(request, release_month, release_year):
         'patch_releases_month': patch_releases_month,
         'release_month': release_month_str,
         'releases_year': releases_year,
+        'month_list': month_list,
+        'month_dict': month_dict
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def releases(request, release_month, release_year):
+    """
+    releases page
+
+    :param release_month:
+    :param release_year:
+    :param request: request
+    :return: response
+    """
+    app_list = App.objects.all
+    release_list = Version.objects.filter(Q(pub_date__month=release_month), Q(pub_date__year=release_year)).order_by(
+        '-pub_date')
+
+    major_releases_month = 0
+    minor_releases_month = 0
+    patch_releases_month = 0
+    releases_year = 0
+
+    last_month = -1
+
+    month_list = []
+
+    for release_item in release_list:
+
+        if release_item.pub_date.year == release_year:
+            releases_year = releases_year + 1
+
+        if release_item.pub_date.month == release_month and release_item.pub_date.year == release_year:
+            if release_item.semantic_version == SemanticVersion.MAJOR.value:
+                major_releases_month = major_releases_month + 1
+            if release_item.semantic_version == SemanticVersion.MINOR.value:
+                minor_releases_month = minor_releases_month + 1
+            if release_item.semantic_version == SemanticVersion.PATCH.value:
+                patch_releases_month = patch_releases_month + 1
+
+        if release_item.pub_date.month != last_month:
+            release_item.first = True
+        else:
+            release_item.first = False
+
+        last_month = release_item.pub_date.month
+
+    for release_item in Version.objects.all().order_by('-pub_date'):
+
+        month_item = MonthYear(release_item.pub_date.month, release_item.pub_date.year)
+        if month_item not in month_list:
+            month_list.append(month_item)
+
+    temp = defaultdict(list)
+    for item in month_list:
+        temp[item.year].append(item.month)
+
+    month_dict = dict((key, tuple(val)) for key, val in temp.items())
+
+    my_date = datetime(release_year, release_month, 1, 4, tzinfo=timezone.utc)
+    locale.setlocale(locale.LC_TIME, translation.to_locale(translation.get_language()))
+    release_month_str = my_date.strftime("%B")
+
+    template = loader.get_template('timeline/releases.html')
+    context = {
+        'app_list': app_list,
+        'title': 'Releases',
+        'release_list': release_list,
+        'major_releases_month': major_releases_month,
+        'minor_releases_month': minor_releases_month,
+        'patch_releases_month': patch_releases_month,
+        'release_month': release_month_str,
+        'releases_year': releases_year,
+        'month_list': month_list,
+        'month_dict': month_dict
     }
     return HttpResponse(template.render(context, request))
 
@@ -504,7 +597,7 @@ def active_users(request):
             dataset = next((x for x in chart_data.datasets if x.name == active_user.app.name), None)
             if dataset is not None:
                 dataset.data[index_val] = active_user.users
-                dataset.delta[index_val] = active_user.users - previous_val # not valid
+                dataset.delta[index_val] = active_user.users - previous_val  # not valid
         except ValueError:
             pass
 

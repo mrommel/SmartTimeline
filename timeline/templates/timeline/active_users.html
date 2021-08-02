@@ -39,7 +39,7 @@
 				</div>
 
 				<div class="card-body">
-					<canvas id="canvas_current" style="background-color:#27293d;" width="1460" height="500"></canvas>
+					<canvas id="canvas_current" style="background-color:#27293d;" width="1460" height="700"></canvas>
 
 					<div class="table-responsive">
 						<table class="table tablesorter " id="">
@@ -83,7 +83,6 @@
 									<th>Delta zum Vormonat</th>
 									<th>Active users iOS</th>
 									<th>Delta zum Vormonat</th>
-
 								</tr>
 							</thead>
 							<tbody>
@@ -127,24 +126,6 @@
 										</tr>
 									{% endwith %}
 								{% endfor %}
-
-									<!--
-									{% for dataset in chart_data.datasets %}
-										{% if dataset.name == "MyFRITZ!App Android" %}
-											{% for item in dataset.data %}
-												<td>{{ item|cut:"0.00" }}<br />(delta)</td>
-											{% endfor %}
-										{% endif %}
-									{% endfor %}
-
-									{% for dataset in chart_data.datasets %}
-										{% if dataset.name == "MyFRITZ!App iOS" %}
-											{% for item in dataset.data %}
-												<td>{{ item|cut:"0.00" }}<br />(delta)</td>
-											{% endfor %}
-										{% endif %}
-									{% endfor %}
-									-->
 							</tbody>
 						</table>
 					</div>
@@ -272,7 +253,7 @@
 				},
 				title: {
 					display: true,
-					text: '{% trans "active users of the" %} FRITZ!Apps in ' + currentText,
+					text: '{% trans "active users of the FRITZ!Apps in" %} ' + currentText,
 					font: {
 					  	size: 27,
 					  	weight: 'normal',

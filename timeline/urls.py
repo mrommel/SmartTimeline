@@ -10,6 +10,7 @@ urlpatterns = [
     path('apps/<int:app_id>/', views.app, name='app'),
     # releases
     path('releases/', views.releases_redirect, name='releases_redirect'),
+    path('releases/all', views.releases_all, name='releases_all'),
     path('releases/<int:release_month>/<int:release_year>', views.releases, name='releases'),
     path('releases/add/', views.add_release, name='add_release'),
     path('releases/<int:release_id>/', views.add_release, name='add_release'),

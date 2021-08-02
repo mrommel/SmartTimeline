@@ -93,14 +93,52 @@
       				</div>
       			</div>
 
+				<div class="row">
+
+      				<div class="col-md-12">
+      					<div class="card card-timeline">
+
+      						<div class="card-header">
+                				<h4 class="card-title">{% trans "Timeline" %}</h4>
+              				</div>
+
+              				<div class="card-body">
+
+								<div class="table-responsive">
+							  		<table class="table tablesorter " id="">
+										<thead class=" text-primary">
+								  			<tr>
+												<th>{% trans "Year" %}</th>
+												<th>{% trans "Month" %}</th>
+								  			</tr>
+										</thead>
+										<tbody>
+											{% for key, values in month_dict.items %}
+												<tr>
+													<td>{{ key }}</td>
+													<td>
+														{% for value in values %}
+															<a href="/timeline/releases/{{ value }}/{{ key }}">{{ value }}</a> | 
+														{% endfor %}
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
 
 				<div class="row">
 
       				<div class="col-md-12">
-
       					<div class="card card-timeline">
+
       						<div class="card-header">
-                				<h4 class="card-title">{% trans "Timeline" %}</h4>
+                				<h4 class="card-title">{% trans "Releases" %}</h4>
               				</div>
 
               				<div class="card-body">
