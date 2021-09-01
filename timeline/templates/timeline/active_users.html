@@ -287,9 +287,9 @@
 						console.log('bar' + dataset.stack);
 						dataset.data.forEach(function(bar, index) {
 							var data = dataset.data[index];
-							if (dataset.stack == 'tv') {
+							if (dataset.stack == 'smart') {
 								sums[4] += data;
-							} else if (dataset.stack == 'smart') {
+							} else if (dataset.stack == 'tv') {
 								sums[3] += data;
 							} else if (dataset.stack == 'wlan') {
 								sums[2] += data;
@@ -303,7 +303,7 @@
 					sums.forEach(function(v, i) {
 						ctx.fillStyle = "#fff";
 						var text = v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-						ctx.fillText(text, (i*185) + 300, 60);
+						ctx.fillText(text, (i*190) + 300, 60);
 					});
 				}
 			}
