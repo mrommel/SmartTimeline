@@ -1,5 +1,9 @@
 from datetime import datetime
 
+from itunes_app_scraper.scraper import AppStoreScraper
+
+COUNTRIES = ['de', 'at', 'it', 'nl', 'be', 'lu', 'gb', 'dk', 'fi', 'fr', 'gr', 'ir', 'ca', 'hr']
+
 
 def month_delta(date, delta):
     """
@@ -50,7 +54,7 @@ class ChartDataset:
         self.color = color
         self.solid = solid
         self.data = []
-        self.delta = [] # absolute, to previous month
+        self.delta = []  # absolute, to previous month
 
 
 class ChartMarker:
@@ -112,3 +116,17 @@ def prev_two_month(date_value=datetime.today()):
             return date_value.replace(month=date_value.month - 2)
         except ValueError:
             return prev_two_month(date_value=date_value.replace(day=date_value.day - 1))
+
+
+def scrape_ios_rating(app_id):
+    scraper = AppStoreScraper()
+    rating_total_product_sum = 0
+    rating_total_count_sum = 0
+
+    for country in COUNTRIES:
+        app_details = scraper.get_app_details(app_id, country)
+        rating_total_product_sum += app_details["averageUserRating"] * app_details["userRatingCount"]
+        rating_total_count_sum += app_details["userRatingCount"]
+
+    rating_total = rating_total_product_sum / rating_total_count_sum
+    return "%.2f" % rating_total

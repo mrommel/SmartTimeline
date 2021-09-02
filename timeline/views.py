@@ -1,7 +1,8 @@
 import locale
 from collections import defaultdict
 from datetime import date, timezone, datetime
-from operator import itemgetter
+
+from google_play_scraper import app as GoogleApp
 
 from django.db.models import Q
 from django.http import HttpResponse
@@ -13,7 +14,7 @@ from django.utils import translation
 from cms.models import Content
 from .form import AddRatingsForm, AddVersionModelForm, AddActiveUsersForm
 from .models import App, Version, Rating, SemanticVersion, ActiveUsers
-from .utils import first, ChartData, ChartDataset, ChartMarker, prev_two_month, MonthYear
+from .utils import first, ChartData, ChartDataset, ChartMarker, prev_two_month, MonthYear, scrape_ios_rating
 
 
 def index(request):
@@ -514,24 +515,35 @@ def add_ratings(request):
     else:
         date_val = date.today()
 
-        from google_play_scraper import app
-        result_myf_android = app('de.avm.android.myfritz2', lang='en', country='us')
+        result_myf_android = GoogleApp('de.avm.android.myfritz2', lang='en', country='us')
         myf_android = "%.2f" % result_myf_android["score"]
 
-        result_fon_android = app('de.avm.android.fritzapp', lang='en', country='us')
+        result_fon_android = GoogleApp('de.avm.android.fritzapp', lang='en', country='us')
         fon_android = "%.2f" % result_fon_android["score"]
 
-        result_wlan_android = app('de.avm.android.wlanapp', lang='en', country='us')
+        result_wlan_android = GoogleApp('de.avm.android.wlanapp', lang='en', country='us')
         wlan_android = "%.2f" % result_wlan_android["score"]
 
-        result_tv_android = app('de.avm.android.fritzapptv', lang='en', country='us')
+        result_tv_android = GoogleApp('de.avm.android.fritzapptv', lang='en', country='us')
         tv_android = "%.2f" % result_tv_android["score"]
 
-        result_smart_home_android = app('de.avm.android.smarthome', lang='en', country='us')
+        result_smart_home_android = GoogleApp('de.avm.android.smarthome', lang='en', country='us')
         smart_home_android = "%.2f" % result_smart_home_android["score"]
 
-        form_data = {'date': date_val, 'myf_android': myf_android, 'fon_android': fon_android,
-                     'wlan_android': wlan_android, 'tv_android': tv_android, 'smart_home_android': smart_home_android}
+        myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
+        fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
+        wlan_ios = scrape_ios_rating(1351324738)  # FRITZ!App WLAN iOS
+        tv_ios = scrape_ios_rating(911447974)  # FRITZ!App TV iOS
+        smart_home_ios = scrape_ios_rating(1477824478)  # FRITZ!App Smart Home iOS
+
+        form_data = {
+            'date': date_val,
+            'myf_android': myf_android, 'myf_ios': myf_ios,
+            'fon_android': fon_android, 'fon_ios': fon_ios,
+            'wlan_android': wlan_android, 'wlan_ios': wlan_ios,
+            'tv_android': tv_android, 'tv_ios': tv_ios,
+            'smart_home_android': smart_home_android, 'smart_home_ios': smart_home_ios
+        }
 
         form = AddRatingsForm(form_data)
 
