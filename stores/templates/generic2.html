@@ -7,7 +7,7 @@
 		{% load static %}
 	  	<link rel="icon" type="image/png" href="{% static 'timeline/img/favicon.png' %}">
     	<title>MiRo - {{ title }}</title>
-    
+
     	<!--     Fonts and icons     -->
   		<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
   		<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -30,96 +30,61 @@
 			a:hover {
 				color: #1d8cf8;
 			}
-			grid-auto-rows: 1fr;
-
-
+			.off-canvas-sidebar, .sidebar {
+            	background: linear-gradient(0deg,#fbab00,#c33b22);
+        	}
+			.btn-orange {
+				background: #fbab00;
+				background-image: linear-gradient(0deg,#fbab00,#c33b22);
+				background-size: 210% 210%;
+				background-position: 100% 0;
+				background-color: #fbab00;
+				transition: all .15s ease;
+				box-shadow: none;
+				color: #fff;
+			}
 		</style>
 
     	{% block styles %} {% endblock %}
-    
+
   	</head>
   	<body>
     	<div class="wrapper">
-    
+
     	<!-- side bar -->
-    	<div class="sidebar" data="{% block menu %}blue{% endblock %}" id="sidebar">
-    	
+    	<div class="sidebar" id="sidebar">
+
     		<div class="sidebar-wrapper">
         		<div class="logo">
           			<a href="javascript:void(0)" class="simple-text logo-mini">
             			MiRo
           			</a>
           			<a href="javascript:void(0)" class="simple-text logo-normal">
-            			{% trans "dashboard" %}
+            			{% trans "stores" %}
           			</a>
         		</div>
-        		
+
         		<ul class="nav">
           			<li class="{% block dashboard_active %} {% endblock %}">
-           				<a href="/timeline/dashboard">
+           				<a href="/stores/dashboard">
               				<i class="tim-icons icon-bullet-list-67"></i>
               				<p>{% trans "dashboard" %}</p>
             			</a>
           			</li>
 					<li class="{% block apps_active %} {% endblock %}">
-            			<a href="/timeline/apps/">
+            			<a href="javascript:void(0)">
               				<i class="tim-icons icon-app"></i>
-              				<p>{% trans "apps" %}</p>
+              				<p>{% trans "ios apps" %}</p>
             			</a>
           			</li>
-          			<li class="{% block releases_active %} {% endblock %}">
-            			<a href="/timeline/releases/">
-              				<i class="tim-icons icon-spaceship"></i>
-              				<p>{% trans "releases" %}</p>
+					<li class="{% block dashboard_inhouse %} {% endblock %}">
+           				<a href="/stores/apps/ios/allInhouseTesters">
+              				<i class="tim-icons icon-bullet-list-67"></i>
+              				<p>{% trans "iOS Inhouse" %}</p>
             			</a>
           			</li>
-					<li class="{% block release_input_active %} {% endblock %}">
-						<a href="/timeline/releases/add">
-							<i class="tim-icons icon-simple-add"></i>
-              				<p>{% trans "add Release" %}</p>
-						</a>
-					</li>
 
-          			<li class="{% block ratings_active %} {% endblock %}">
-            			<a href="/timeline/ratings/">
-              				<i class="tim-icons icon-chart-bar-32"></i>
-              				<p>{% trans "all ratings" %}</p>
-            			</a>
-          			</li>
-					<li class="{% block last_ratings_active %} {% endblock %}">
-            			<a href="/timeline/lastratings/">
-              				<i class="tim-icons icon-chart-bar-32"></i>
-              				<p>{% trans "ratings of last 2 month" %}</p>
-            			</a>
-          			</li>
-					<li class="{% block rating_input_active %} {% endblock %}">
-						<a href="/timeline/ratings/add">
-							<i class="tim-icons icon-simple-add"></i>
-              				<p>{% trans "add rating" %}</p>
-						</a>
-					</li>
-
-					<li class="{% block active_users_active %} {% endblock %}">
-            			<a href="/timeline/active_users/">
-              				<i class="tim-icons icon-chart-bar-32"></i>
-              				<p>{% trans "active users" %}</p>
-            			</a>
-          			</li>
-					<li class="{% block active_user_input_active %} {% endblock %}">
-						<a href="/timeline/active_users/add/">
-							<i class="tim-icons icon-simple-add"></i>
-              				<p>{% trans "add active users" %}</p>
-						</a>
-					</li>
-				</ul>
-				<div class="divider">&nbsp;</div>
-				<ul class="nav">
-          			<li class="{% block roadmap_active %} {% endblock %}">
-            			<a href="/roadmap">
-              				<i class="tim-icons icon-settings"></i>
-              				<p>{% trans "roadmaps" %}</p>
-            			</a>
-          			</li>
+					{% block navi_apps %}<!-- apps -->{% endblock %}
         		</ul>
 				<div class="divider">&nbsp;</div>
 				<br /><br /><br />
@@ -132,12 +97,12 @@
           			</li>
         		</ul>
      		</div>
-    	
-    	
-    	</div>	
-    
+
+
+    	</div>
+
     	<div class="main-panel" data="blue">
-    	
+
     		<nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
         		<div class="container-fluid">
           			<div class="navbar-wrapper">
@@ -167,13 +132,13 @@
           			</div>
         		</div>
       		</nav>
-      		
+
       		<div class="content">
-      		
+
       			{% block content %}
       			dummy
       			{% endblock %}
-      			
+
       		</div>
 
 			<footer class="footer">
@@ -190,6 +155,11 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="/timeline/dashboard" class="nav-link">
+								Timeline
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="javascript:void(0)" class="nav-link">
 								Blog
 							</a>
@@ -197,11 +167,6 @@
 						<li class="nav-item">
 							<a href="/fritzbox/dashboard" class="nav-link">
 								FRITZ!Box TR-064 Listing
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/stores/dashboard" class="nav-link">
-								Stores
 							</a>
 						</li>
 					</ul>
@@ -215,14 +180,14 @@
 					</div>
 				</div>
       		</footer>
-    	
+
     	</div>
     </div>
-    
+
     <script src="{% static 'timeline/js/jquery.min.js' %}"></script>
   	<script src="{% static 'timeline/js/popper.min.js' %}"></script>
   	<script src="{% static 'timeline/js/bootstrap.min.js' %}"></script>
-  
+
   	<script src="{% static 'timeline/js/black-dashboard.min.js' %}"></script>
 
   	{% block scripts %} {% endblock %}

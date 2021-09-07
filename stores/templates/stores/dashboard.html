@@ -1,0 +1,52 @@
+{% extends "generic2.html" %}
+
+{% block navi_apps %}
+    <!-- apps -->
+    {% for app in apps %}
+        <!--<li class="">
+            <a href="/stores/apps/ios/{{ app.bundleId }}">
+                <i class="tim-icons icon-app"></i>
+                <p>{{ app.name }}</p>
+            </a>
+        </li>-->
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-category">Android</h5>
+                <h4 class="card-title">MyFRITZ!App</h4>
+            </div>
+
+            <div class="card-body">
+                Info
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        {% for app in ios_apps %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-category">iOS</h5>
+                    <h4 class="card-title">{{ app.name }}</h4>
+                </div>
+
+                <div class="card-body">
+                    Info2
+                    <a href="/stores/apps/ios/{{ app.id }}">
+                        <p>{{ app.name }}</p>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

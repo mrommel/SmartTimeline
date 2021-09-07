@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'fritzbox.apps.FritzboxConfig',
     'cms.apps.CmsConfig',
     'roadmap.apps.RoadmapConfig',
+    'stores.apps.StoresConfig',
     'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',

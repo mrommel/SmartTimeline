@@ -24,6 +24,7 @@ urlpatterns = [
     path('fritzbox/', include('fritzbox.urls')),
     path('cms/', include('cms.urls')),
     path('roadmap/', include('roadmap.urls')),
+    path('stores/', include('stores.urls')),
     path('admin/', admin.site.urls),
 ]
 

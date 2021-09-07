@@ -1,0 +1,34 @@
+{% extends "generic2.html" %}
+
+{% block navi_apps %}
+    <!-- apps -->
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-category">iOS</h5>
+                <h3 class="card-title">{{ app.name }}</h3>
+            </div>
+
+            <div class="card-body">
+                <h5>Beta Groups</h5>
+                <p>
+                    {% for group in beta_groups %}
+                        <h6>{{ group.name }}</h6>
+
+                        <p><a href="/stores/apps/ios/betaTesters/{{ group.id }}">list users</a></p>
+                        <p><br/></p>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

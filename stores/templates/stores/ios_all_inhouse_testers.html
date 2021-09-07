@@ -1,0 +1,55 @@
+{% extends "generic2.html" %}
+{% load i18n %}
+
+{% block navi_apps %}
+    <!-- apps -->
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        {% for item in data %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-category">Beta Group</h5>
+                    <h3 class="card-title">{{ item.beta_group.app.name }}: {{ item.beta_group.name }}</h3>
+                </div>
+
+                <div class="card-body">
+                    <h5>Testers: {{ item.beta_testers|length }}</h5>
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>Email</th>
+                                    <th>First</th>
+                                    <th>Last</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for beta_tester in item.beta_testers %}
+                                    <tr>
+                                        <td>{{ beta_tester.email }}</td>
+                                        <td>{{ beta_tester.firstName }}</td>
+                                        <td>{{ beta_tester.lastName }}</td>
+                                        <td>
+                                            <form action="/stores/apps/ios/delete/beta_tester/{{ beta_tester.id }}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-fill btn-orange">{% trans "Delete" %}</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
