@@ -516,7 +516,10 @@ def add_ratings(request):
         date_val = date.today()
 
         result_myf_android = GoogleApp('de.avm.android.myfritz2', lang='en', country='us')
-        myf_android = "%.2f" % result_myf_android["score"]
+        if result_myf_android["score"] is not None:
+            myf_android = "%.2f" % result_myf_android["score"]
+        else:
+            myf_android = ""
 
         result_fon_android = GoogleApp('de.avm.android.fritzapp', lang='en', country='us')
         fon_android = "%.2f" % result_fon_android["score"]
