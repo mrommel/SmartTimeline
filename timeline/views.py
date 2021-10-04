@@ -210,6 +210,7 @@ def releases(request, release_month, release_year):
     app_list = App.objects.all
     release_list = Version.objects.filter(Q(pub_date__month=release_month), Q(pub_date__year=release_year)).order_by(
         '-pub_date')
+    release_list_all = Version.objects.order_by('-pub_date')
 
     major_releases_month = 0
     minor_releases_month = 0
@@ -220,10 +221,12 @@ def releases(request, release_month, release_year):
 
     month_list = []
 
-    for release_item in release_list:
+    for release_item in release_list_all:
 
         if release_item.pub_date.year == release_year:
             releases_year = releases_year + 1
+
+    for release_item in release_list:
 
         if release_item.pub_date.month == release_month and release_item.pub_date.year == release_year:
             if release_item.semantic_version == SemanticVersion.MAJOR.value:
