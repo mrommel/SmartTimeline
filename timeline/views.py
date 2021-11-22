@@ -518,22 +518,22 @@ def add_ratings(request):
     else:
         date_val = date.today()
 
-        result_myf_android = GoogleApp('de.avm.android.myfritz2', lang='en', country='us')
+        result_myf_android = GoogleApp('de.avm.android.myfritz2', lang='de', country='de')
         if result_myf_android["score"] is not None:
             myf_android = "%.2f" % result_myf_android["score"]
         else:
             myf_android = ""
 
-        result_fon_android = GoogleApp('de.avm.android.fritzapp', lang='en', country='us')
+        result_fon_android = GoogleApp('de.avm.android.fritzapp', lang='de', country='de')
         fon_android = "%.2f" % result_fon_android["score"]
 
-        result_wlan_android = GoogleApp('de.avm.android.wlanapp', lang='en', country='us')
+        result_wlan_android = GoogleApp('de.avm.android.wlanapp', lang='de', country='de')
         wlan_android = "%.2f" % result_wlan_android["score"]
 
-        result_tv_android = GoogleApp('de.avm.android.fritzapptv', lang='en', country='us')
+        result_tv_android = GoogleApp('de.avm.android.fritzapptv', lang='de', country='de')
         tv_android = "%.2f" % result_tv_android["score"]
 
-        result_smart_home_android = GoogleApp('de.avm.android.smarthome', lang='en', country='us')
+        result_smart_home_android = GoogleApp('de.avm.android.smarthome', lang='de', country='de')
         smart_home_android = "%.2f" % result_smart_home_android["score"]
 
         myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS

@@ -1,4 +1,4 @@
-#!/Users/michaelrommel/.virtualenvs/smarttimeline/bin/python
+#!/Users/michaelrommel/Prog/SmartTimeline/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
