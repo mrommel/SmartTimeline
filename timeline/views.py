@@ -525,16 +525,28 @@ def add_ratings(request):
             myf_android = ""
 
         result_fon_android = GoogleApp('de.avm.android.fritzapp', lang='de', country='de')
-        fon_android = "%.2f" % result_fon_android["score"]
+        if result_fon_android["score"] is not None:
+            fon_android = "%.2f" % result_fon_android["score"]
+        else:
+            fon_android = ""
 
         result_wlan_android = GoogleApp('de.avm.android.wlanapp', lang='de', country='de')
-        wlan_android = "%.2f" % result_wlan_android["score"]
+        if result_wlan_android["score"] is not None:
+            wlan_android = "%.2f" % result_wlan_android["score"]
+        else:
+            wlan_android = ""
 
         result_tv_android = GoogleApp('de.avm.android.fritzapptv', lang='de', country='de')
-        tv_android = "%.2f" % result_tv_android["score"]
+        if result_tv_android["score"] is not None:
+            tv_android = "%.2f" % result_tv_android["score"]
+        else:
+            tv_android = ""
 
         result_smart_home_android = GoogleApp('de.avm.android.smarthome', lang='de', country='de')
-        smart_home_android = "%.2f" % result_smart_home_android["score"]
+        if result_smart_home_android["score"] is not None:
+            smart_home_android = "%.2f" % result_smart_home_android["score"]
+        else:
+            smart_home_android = ""
 
         myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
         fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
