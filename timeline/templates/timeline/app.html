@@ -100,24 +100,10 @@
 {% block scripts %}
 	{% load static %}
 	<script src="{% static 'timeline/js/Chart.min.js' %}"></script>
-	<script src="{% static 'timeline/js/Chart.markers.js' %}"></script>
 	<script src="{% static 'timeline/js/roundrect.js' %}"></script>
 
 	<script>
 	var ratingsLabels = [{% for timeline_item in chart_data.timeline %}'{{ timeline_item }}', {% endfor %}];
-
-	var markerArray = [];
-	{% for marker in chart_data.markers %}
-		var marker{{ forloop.counter0 }} = {
-			datasetLabel: '{{ marker.app_name }}',
-			dataIndex: {{ marker.timeline_index }},
-			reference: '{{ marker.marker }}'
-		};
-		markerArray.push(marker{{ forloop.counter0 }});
-	{% endfor %}
-
-	Chart.defaults.global.defaultFontColor = '#fff';
-	Chart.defaults.global.defaultFontFamily = 'Poppins,sans-serif';
 	var config = {
 		type: 'line',
 		data: {
@@ -125,14 +111,16 @@
 			datasets: []
 		},
 		options: {
-			responsive: true,
-			aspectRatio: 1.5,
-			title: {
-				display: true,
-				text: '{% trans "Ratings of" %} {{ app 	}}',
-				fontSize: 27,
-				fontStyle: 'normal'
+			plugins: {
+				title: {
+					display: true,
+					text: '{% trans "Ratings of" %} {{ app 	}}',
+					fontSize: 27,
+					fontStyle: 'normal'
+				},
 			},
+			responsive: true,
+			aspectRatio: 1.7,
 			tooltips: {
 				mode: 'index',
 				intersect: false,
@@ -142,41 +130,45 @@
 				intersect: true
 			},
 			scales: {
-				xAxes: [{
+				x: {
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
 						labelString: 'Datum'
 					},
-					gridLines: {
+					grid: {
 						display: false,
 						color: '#eeeeee55'
 					},
-				}],
-				yAxes: [{
+					ticks: {
+						color: '#fff',
+					},
+				},
+				y: {
 					display: true,
-					scaleLabel: {
+					title: {
 						display: true,
 						labelString: 'Sterne'
 					},
-					gridLines: {
+					grid: {
 						color: '#eeeeee55'
 					},
+					min: 1.0,
+					max: 5.0,
 					ticks: {
-						min: 1.0,
-						max: 5.0
+          				stepSize: 0.5,
+          				color: '#fff',
 					}
-				}]
+				}
 			},
-			legend: {
-				display: true,
-				position: 'bottom',
-			},
-			markers: {
-				display: false,
-				fontColor: '#000',
-				fontSize: 12,
-				references: markerArray
+			plugins: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						color: '#fff'
+					}
+				}
 			}
 		}
 	};
@@ -197,8 +189,8 @@
 	{% endfor %}
 
 	function toggleMarkers() {
-		config.options.markers.display = !config.options.markers.display;
-		ratingChart.chart.update();
+		// config.options.markers.display = !config.options.markers.display;
+		// ratingChart.chart.update();
 	}
 
 	var ratingChart = {};

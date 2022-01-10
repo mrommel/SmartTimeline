@@ -157,23 +157,12 @@
 	<script>
 	var ratingsLabels = [{% for timeline_item in chart_data.timeline %}'{{ timeline_item }}', {% endfor %}];
 
-	var markerArray = [];
-	{% for marker in chart_data.markers %}
-		var marker{{ forloop.counter0 }} = {
-			datasetLabel: '{{ marker.app_name }}',
-			dataIndex: {{ marker.timeline_index }},
-			reference: '{{ marker.marker }}'
-		};
-		markerArray.push(marker{{ forloop.counter0 }});
-	{% endfor %}
-
 	var config = {
 		type: 'line',
 		data: {
 			labels: ratingsLabels,
 			datasets: []
 		},
-		// plugins: [ChartDataLabels], /* https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration */
 		options: {
 			plugins: {
 				title: {
@@ -253,8 +242,8 @@
 	{% endfor %}
 
 	function toggleMarkers() {
-		config.options.markers.display = !config.options.markers.display;
-		ratingChart.chart.update();
+		// config.options.markers.display = !config.options.markers.display;
+		// ratingChart.chart.update();
 	}
 
 	function tweakLib(){
