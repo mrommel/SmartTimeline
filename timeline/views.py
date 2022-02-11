@@ -316,8 +316,15 @@ def add_release(request, release_id=-1):
 
     return render(request, 'timeline/release_form.html', {'form': form})
 
+def ratings_current(request):
 
-def ratings(request):
+    today = date.today()
+    rating_month = today.month
+    rating_year = today.year
+
+    return ratings(request, rating_month, rating_year)
+
+def ratings(request, rating_month, rating_year):
     """
     ratings page
 
@@ -331,7 +338,11 @@ def ratings(request):
 
     # get all dates
     for rating in Rating.objects.order_by('pub_date'):
-        chart_data.timeline.append(rating.pub_date)
+        if rating.pub_date.year < rating_year or (rating.pub_date.year == rating_year and rating.pub_date.month <= rating_month):
+            print("%d-%d <= %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
+            chart_data.timeline.append(rating.pub_date)
+        else:
+            print("%d-%d > %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
 
     # remove duplicates
     chart_data.timeline = list(set(chart_data.timeline))
@@ -350,11 +361,14 @@ def ratings(request):
 
     # actually fill
     for rating in Rating.objects.order_by('pub_date'):
-        index_val = chart_data.timeline.index(rating.pub_date)
+        try:
+            index_val = chart_data.timeline.index(rating.pub_date)
 
-        dataset = next((x for x in chart_data.datasets if x.name == rating.app.name), None)
-        if dataset is not None:
-            dataset.data[index_val] = rating.rating
+            dataset = next((x for x in chart_data.datasets if x.name == rating.app.name), None)
+            if dataset is not None:
+                dataset.data[index_val] = rating.rating
+        except ValueError:
+            continue
 
     # problem: there must be a rating after the last release
     for version in Version.objects.all():
@@ -551,7 +565,7 @@ def add_ratings(request):
         myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
         fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
         wlan_ios = scrape_ios_rating(1351324738)  # FRITZ!App WLAN iOS
-        tv_ios = scrape_ios_rating(911447974)  # FRITZ!App TV iOS
+        tv_ios = 0.0 # scrape_ios_rating(911447974)  # FRITZ!App TV iOS
         smart_home_ios = scrape_ios_rating(1477824478)  # FRITZ!App Smart Home iOS
 
         form_data = {
