@@ -565,7 +565,7 @@ def add_ratings(request):
         myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
         fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
         wlan_ios = scrape_ios_rating(1351324738)  # FRITZ!App WLAN iOS
-        tv_ios = 0.0 # scrape_ios_rating(911447974)  # FRITZ!App TV iOS
+        tv_ios = scrape_ios_rating(911447974)  # FRITZ!App TV iOS
         smart_home_ios = scrape_ios_rating(1477824478)  # FRITZ!App Smart Home iOS
 
         form_data = {
