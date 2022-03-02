@@ -1,6 +1,7 @@
 {% extends "generic.html" %}
 
 {% load i18n %}
+{% load humanize %}
 {% block title %}Active Users{% endblock %}
 
 {% block active_users_active %}active{% endblock %}
@@ -24,6 +25,18 @@
 		}
 		.table>tbody>tr>td {
 			padding: 6px 7px;
+		}
+		.positive {
+			color: green;
+		}
+		.positive::before {
+			content:'+'
+		}
+		.negative {
+			color: red;
+		}
+		.normal {
+			color: yellow;
 		}
 	</style>
 {% endblock %}
@@ -55,9 +68,9 @@
 								{% for app in app_list %}
 									<tr>
 										<td><img src="/static/timeline/img/apps/{{ app.name }}.png" class="app_icon" />&nbsp;&nbsp;<a href="/timeline/apps/{{ app.id }}/">{{ app.name }}</a></td>
-										<td>{{ app.current_users.users|cut:"0.00" }}</td>
-										<td>{{ app.last_month_users.users|cut:"0.00" }} ({{ app.delta_last_month|cut:"0.00" }}%)</td>
-										<td>{{ app.twelve_month_ago_users.users|cut:"0.00" }} ({{ app.delta_last_year|cut:"0.00" }}%)</td>
+										<td>{{ app.current_users.users|intcomma }}</td>
+										<td>{{ app.last_month_users.users|intcomma }} (<span class="{% if app.delta_last_month < -0.05 %}negative{% elif app.delta_last_month > 0.05 %}positive{% else %}normal{% endif %}">{{ app.delta_last_month|floatformat:'2' }}%</span>)</td>
+										<td>{{ app.twelve_month_ago_users.users|intcomma }} (<span class="{% if app.delta_last_year < -0.05 %}negative{% elif app.delta_last_year > 0.05 %}positive{% else %}normal{% endif %}">{{ app.delta_last_year|floatformat:'2' }}%</span>)</td>
 									</tr>
 								{% endfor %}
 							</tbody>

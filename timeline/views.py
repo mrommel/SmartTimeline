@@ -314,7 +314,11 @@ def add_release(request, release_id=-1):
             form_data = {'pub_date': date_val}
             form = AddVersionModelForm(form_data)
 
-    return render(request, 'timeline/release_form.html', {'form': form})
+    context = {
+        'title': 'Releases',
+        'form': form,
+    }
+    return render(request, 'timeline/release_form.html', context)
 
 def ratings_current(request):
 
@@ -579,7 +583,12 @@ def add_ratings(request):
 
         form = AddRatingsForm(form_data)
 
-    return render(request, 'timeline/rating_form.html', {'form': form})
+    context = {
+        'title': 'Ratings',
+        'form': form,
+    }
+
+    return render(request, 'timeline/rating_form.html', context)
 
 
 def active_users(request):
@@ -598,14 +607,16 @@ def active_users(request):
         twelve_month_users_val = app.twelve_month_ago_users().users
 
         last_month_value = 100.0 - float(int(last_month_users_val / current_users_val * 10000.0)) / 100.0
-        app.delta_last_month = "{:.2f}".format(last_month_value)
-        if last_month_value > 0:
-            app.delta_last_month = '+%s' % app.delta_last_month
+        app.delta_last_month = last_month_value
+        # app.delta_last_month = "{:.2f}".format(last_month_value)
+        # if last_month_value > 0:
+        #    app.delta_last_month = '+%s' % app.delta_last_month
 
         last_year_value = 100.0 - float(int(twelve_month_users_val / current_users_val * 10000.0)) / 100.0
-        app.delta_last_year = "{:.2f}".format(last_year_value)
-        if last_year_value > 0:
-            app.delta_last_year = '+%s' % app.delta_last_year
+        app.delta_last_year = last_year_value
+        # app.delta_last_year = "{:.2f}".format(last_year_value)
+        # if last_year_value > 0:
+        #    app.delta_last_year = '+%s' % app.delta_last_year
 
     # get all dates
     for active_user in ActiveUsers.objects.order_by('date'):
@@ -742,4 +753,8 @@ def add_active_users(request):
                 'class': 'form-control'
             })
 
-    return render(request, 'timeline/active_users_form.html', {'form': form})
+    context = {
+        'title': 'Active Users',
+        'form': form,
+    }
+    return render(request, 'timeline/active_users_form.html', context)

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.humanize',
     'timeline.apps.TimelineConfig',
     'fritzbox.apps.FritzboxConfig',
     'cms.apps.CmsConfig',
