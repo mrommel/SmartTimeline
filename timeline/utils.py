@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import time
 from itunes_app_scraper.scraper import AppStoreScraper
 from itunes_app_scraper.util import AppStoreException
 
@@ -39,6 +40,7 @@ COUNTRIES = [
     'se', # Sweden
     'si', # Slovenia
     'sk', # Slovakia
+    'sr', # ???
     'tr', # Turkey
     'ua', # Ukraine
     'us', # United States of America
@@ -166,15 +168,21 @@ def scrape_ios_rating(app_id):
 
     for country in COUNTRIES:
         try:
+            # time.sleep(1)
             app_details = scraper.get_app_details(app_id, country)
         except AppStoreException:
             continue
         except KeyError:
             continue
+        except:
+           continue
 
         if app_details is not None:
             rating_total_product_sum += app_details["averageUserRating"] * app_details["userRatingCount"]
             rating_total_count_sum += app_details["userRatingCount"]
+
+    if rating_total_count_sum == 0:
+        rating_total_count_sum = 1
 
     rating_total = rating_total_product_sum / rating_total_count_sum
     return "%.2f" % rating_total

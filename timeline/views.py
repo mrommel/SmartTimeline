@@ -5,8 +5,7 @@ from datetime import date, timezone, datetime
 from google_play_scraper import app as GoogleApp
 
 from django.db.models import Q
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils import translation
@@ -343,10 +342,11 @@ def ratings(request, rating_month, rating_year):
     # get all dates
     for rating in Rating.objects.order_by('pub_date'):
         if rating.pub_date.year < rating_year or (rating.pub_date.year == rating_year and rating.pub_date.month <= rating_month):
-            print("%d-%d <= %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
+            # print("%d-%d <= %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
             chart_data.timeline.append(rating.pub_date)
         else:
-            print("%d-%d > %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
+            # print("%d-%d > %d-%d" % (rating.pub_date.year, rating.pub_date.month, rating_year, rating_month))
+            pass
 
     # remove duplicates
     chart_data.timeline = list(set(chart_data.timeline))
@@ -455,6 +455,15 @@ def ratings_last_months(request):
         'chart_data': chart_data
     }
     return HttpResponse(template.render(context, request))
+
+
+def rating_for_ios_app(request):
+    app_id = request.GET.get('app_id', None)
+    rating = scrape_ios_rating(app_id)
+    data = {
+        'rating': rating
+    }
+    return JsonResponse(data)
 
 
 def add_ratings(request):
@@ -566,11 +575,16 @@ def add_ratings(request):
         else:
             smart_home_android = ""
 
-        myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
-        fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
-        wlan_ios = scrape_ios_rating(1351324738)  # FRITZ!App WLAN iOS
-        tv_ios = scrape_ios_rating(911447974)  # FRITZ!App TV iOS
-        smart_home_ios = scrape_ios_rating(1477824478)  # FRITZ!App Smart Home iOS
+        # myf_ios = scrape_ios_rating(620435371)  # MyFRITZ!App iOS
+        myf_ios = ""
+        # fon_ios = scrape_ios_rating(372184475)  # FRITZ!App FON iOS
+        fon_ios = ""
+        # wlan_ios = scrape_ios_rating(1351324738)  # FRITZ!App WLAN iOS
+        wlan_ios = ""
+        # tv_ios = scrape_ios_rating(911447974)  # FRITZ!App TV iOS
+        tv_ios = ""
+        # smart_home_ios = scrape_ios_rating(1477824478)  # FRITZ!App Smart Home iOS
+        smart_home_ios = ""
 
         form_data = {
             'date': date_val,

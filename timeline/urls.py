@@ -23,4 +23,6 @@ urlpatterns = [
     # active users
     path('active_users/', views.active_users, name='active_users'),
     path('active_users/add/', views.add_active_users, name='add_active_users'),
+    # ajax
+    path('ajax/rating_for_ios_app/', views.rating_for_ios_app, name='rating_for_ios_app'),
 ]

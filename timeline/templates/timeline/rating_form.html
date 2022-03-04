@@ -16,6 +16,70 @@
             box-shadow: none;
             color: #fff;
         }
+        @keyframes rotate {
+            from { transform: rotate(0deg) }
+            to { transform: rotate(360deg) }
+        }
+        #refresh-button-myf_ios {
+            animation-play-state: running;
+            border-style: none;
+            background-color: #00000000;
+            float: right;
+        }
+        #refresh-button-fon_ios {
+            animation-play-state: running;
+            border-style: none;
+            background-color: #00000000;
+            float: right;
+        }
+        #refresh-button-wlan_ios {
+            animation-play-state: running;
+            border-style: none;
+            background-color: #00000000;
+            float: right;
+        }
+        #refresh-button-tv_ios {
+            animation-play-state: running;
+            border-style: none;
+            background-color: #00000000;
+            float: right;
+        }
+        #refresh-button-smart_home_ios {
+            animation-play-state: running;
+            border-style: none;
+            background-color: #00000000;
+            float: right;
+        }
+        .refresh-start {
+            animation-name: rotate;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            animation-play-state: running;
+        }
+        .refresh-end {
+            animation-play-state: paused !important;
+        }
+        input[name="myf_ios"] {
+            width: 90%;
+            display: inline;
+        }
+        input[name="fon_ios"] {
+            width: 90%;
+            display: inline;
+        }
+        input[name="wlan_ios"] {
+            width: 90%;
+            display: inline;
+        }
+        input[name="tv_ios"] {
+            width: 90%;
+            display: inline;
+        }
+        input[name="smart_home_ios"] {
+            width: 90%;
+            display: inline;
+        }
        </style>
 {% endblock %}
 
@@ -56,6 +120,7 @@
                                     {{ form.myf_ios.errors }}
                                     <label for="{{ form.myf_ios.id_for_label }}">MyFRITZ!App iOS</label>
                                     {{ form.myf_ios }}
+                                    <button id="refresh-button-myf_ios" onclick="refreshContent(620435371, 'myf_ios')"><img id="refresh-icon-myf_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
                                 </div>
                             </div>
                         </div>
@@ -73,6 +138,7 @@
                                     {{ form.fon_ios.errors }}
                                     <label for="{{ form.fon_ios.id_for_label }}">FRITZ!App Fon iOS</label>
                                     {{ form.fon_ios }}
+                                    <button id="refresh-button-fon_ios" onclick="refreshContent(372184475, 'fon_ios')"><img id="refresh-icon-fon_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
                                 </div>
                             </div>
                         </div>
@@ -90,6 +156,7 @@
                                     {{ form.wlan_ios.errors }}
                                     <label for="{{ form.wlan_ios.id_for_label }}">FRITZ!App WLAN iOS</label>
                                     {{ form.wlan_ios }}
+                                    <button id="refresh-button-wlan_ios" onclick="refreshContent(1351324738, 'wlan_ios')"><img id="refresh-icon-wlan_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
                                 </div>
                             </div>
                         </div>
@@ -107,6 +174,7 @@
                                     {{ form.tv_ios.errors }}
                                     <label for="{{ form.tv_ios.id_for_label }}">FRITZ!App TV iOS</label>
                                     {{ form.tv_ios }}
+                                    <button id="refresh-button-tv_ios" onclick="refreshContent(911447974, 'tv_ios')"><img id="refresh-icon-tv_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
                                 </div>
                             </div>
                         </div>
@@ -124,6 +192,7 @@
                                     {{ form.smart_home_ios.errors }}
                                     <label for="{{ form.smart_home_ios.id_for_label }}">FRITZ!App Smart Home iOS</label>
                                     {{ form.smart_home_ios }}
+                                    <button id="refresh-button-smart_home_ios" onclick="refreshContent(1477824478, 'smart_home_ios')"><img id="refresh-icon-smart_home_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
                                 </div>
                             </div>
                         </div>
@@ -150,6 +219,37 @@
         </div>
     </div>
 
-
 {% endblock %}
 
+{% block scripts %}
+	{% load static %}
+	<script>
+        function refreshContent(app_id, formFieldName) {
+            let refreshIcon = document.getElementById("refresh-icon-" + formFieldName);
+            let refreshButton = document.getElementById("refresh-button-" + formFieldName);
+            let formField = document.getElementsByName(formFieldName)[0];
+            refreshButton.removeAttribute("class");
+            refreshButton.disabled = true;
+            refreshIcon.setAttribute("class", "refresh-start");
+
+            $.ajax({
+                url: '/timeline/ajax/rating_for_ios_app/',
+                data: {
+                  'app_id': app_id
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // console.log(data.rating)
+                    formField.value = data.rating;
+
+                    refreshIcon.addEventListener("animationiteration", function animationiteration () {
+                        refreshButton.setAttribute("class", "refresh-end");
+                        refreshButton.disabled = false;
+                        refreshIcon.removeAttribute("class");
+                        refreshIcon.removeEventListener("animationiteration", animationiteration);
+                    });
+                }
+            });
+        }
+	</script>
+{% endblock %}
