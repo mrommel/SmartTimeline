@@ -100,9 +100,9 @@
                         <div class="row">
                             <div class="col-md-12 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.date.errors }}
                                     <label for="{{ form.date.id_for_label }}">Date</label>
                                     {{ form.date }}
+                                    {{ form.date.errors }}
                                 </div>
                             </div>
                         </div>
@@ -110,17 +110,23 @@
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.myf_android.errors }}
                                     <label for="{{ form.myf_android.id_for_label }}">MyFRITZ!App Android</label>
                                     {{ form.myf_android }}
+                                    {{ form.myf_android.errors }}
                                 </div>
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    {{ form.myf_ios.errors }}
                                     <label for="{{ form.myf_ios.id_for_label }}">MyFRITZ!App iOS</label>
                                     {{ form.myf_ios }}
                                     <button id="refresh-button-myf_ios" onclick="refreshContent(620435371, 'myf_ios')"><img id="refresh-icon-myf_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
+                                    {% if form.myf_ios.errors %}
+                                        <ul id="errors-myf_ios">
+                                        {% for error in form.myf_ios.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -128,17 +134,23 @@
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.fon_android.errors }}
                                     <label for="{{ form.fon_android.id_for_label }}">FRITZ!App Fon Android</label>
                                     {{ form.fon_android }}
+                                    {{ form.fon_android.errors }}
                                 </div>
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    {{ form.fon_ios.errors }}
                                     <label for="{{ form.fon_ios.id_for_label }}">FRITZ!App Fon iOS</label>
                                     {{ form.fon_ios }}
                                     <button id="refresh-button-fon_ios" onclick="refreshContent(372184475, 'fon_ios')"><img id="refresh-icon-fon_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
+                                    {% if form.fon_ios.errors %}
+                                        <ul id="errors-fon_ios">
+                                        {% for error in form.fon_ios.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -146,17 +158,23 @@
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.wlan_android.errors }}
                                     <label for="{{ form.wlan_android.id_for_label }}">FRITZ!App WLAN Android</label>
                                     {{ form.wlan_android }}
+                                    {{ form.wlan_android.errors }}
                                 </div>
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    {{ form.wlan_ios.errors }}
                                     <label for="{{ form.wlan_ios.id_for_label }}">FRITZ!App WLAN iOS</label>
                                     {{ form.wlan_ios }}
                                     <button id="refresh-button-wlan_ios" onclick="refreshContent(1351324738, 'wlan_ios')"><img id="refresh-icon-wlan_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
+                                    {% if form.wlan_ios.errors %}
+                                        <ul id="errors-wlan_ios">
+                                        {% for error in form.wlan_ios.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -164,17 +182,23 @@
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.tv_android.errors }}
                                     <label for="{{ form.tv_android.id_for_label }}">FRITZ!App TV Android</label>
                                     {{ form.tv_android }}
+                                    {{ form.tv_android.errors }}
                                 </div>
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    {{ form.tv_ios.errors }}
                                     <label for="{{ form.tv_ios.id_for_label }}">FRITZ!App TV iOS</label>
                                     {{ form.tv_ios }}
                                     <button id="refresh-button-tv_ios" onclick="refreshContent(911447974, 'tv_ios')"><img id="refresh-icon-tv_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
+                                    {% if form.tv_ios.errors %}
+                                        <ul id="errors-tv_ios">
+                                        {% for error in form.tv_ios.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -182,24 +206,30 @@
                         <div class="row">
                             <div class="col-md-6 pr-md-1">
                                 <div class="form-group">
-                                    {{ form.smart_home_android.errors }}
                                     <label for="{{ form.smart_home_android.id_for_label }}">FRITZ!App Smart Home Android</label>
                                     {{ form.smart_home_android }}
+                                    {{ form.smart_home_android.errors }}
                                 </div>
                             </div>
                             <div class="col-md-6 pl-md-1">
                                 <div class="form-group">
-                                    {{ form.smart_home_ios.errors }}
                                     <label for="{{ form.smart_home_ios.id_for_label }}">FRITZ!App Smart Home iOS</label>
                                     {{ form.smart_home_ios }}
                                     <button id="refresh-button-smart_home_ios" onclick="refreshContent(1477824478, 'smart_home_ios')"><img id="refresh-icon-smart_home_ios" src="{% static 'timeline/img/refresh-icon.svg' %}" height="12" /></button>
+                                    {% if form.smart_home_ios.errors %}
+                                        <ul id="errors-smart_home_ios">
+                                        {% for error in form.smart_home_ios.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="card-footer">
+                        <button id="refresh-button-all_ios" class="btn btn-fill btn-secondary" onclick="refreshAll()">Update</button>
                         <button type="submit" class="btn btn-fill btn-primary">Save</button>
                     </div>
                 </form>
@@ -224,6 +254,13 @@
 {% block scripts %}
 	{% load static %}
 	<script>
+	    function refreshAll() {
+	        refreshContent(620435371, 'myf_ios');
+	        refreshContent(372184475, 'fon_ios');
+	        refreshContent(1351324738, 'wlan_ios');
+	        refreshContent(911447974, 'tv_ios');
+	        refreshContent(1477824478, 'smart_home_ios');
+	    }
         function refreshContent(app_id, formFieldName) {
             let refreshIcon = document.getElementById("refresh-icon-" + formFieldName);
             let refreshButton = document.getElementById("refresh-button-" + formFieldName);
@@ -248,6 +285,9 @@
                         refreshIcon.removeAttribute("class");
                         refreshIcon.removeEventListener("animationiteration", animationiteration);
                     });
+
+                    let errorsField = document.getElementById("errors-" + formFieldName);
+                    errorsField.style.display = 'none';
                 }
             });
         }
