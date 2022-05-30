@@ -55,3 +55,9 @@ python3 ../manage.py compilemessages
 
 https://demos.creative-tim.com/black-dashboard/examples/notifications.html
 https://github.com/Ponytech/appstoreconnectapi
+
+## update requirements
+
+cd ~/Prog/SmartTimeline/
+source ~/.virtualenvs/smarttimeline/bin/activate
+pip3 install -r requirements.txt

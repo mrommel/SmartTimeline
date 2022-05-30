@@ -3,6 +3,7 @@ from collections import defaultdict
 from datetime import date, timezone, datetime
 
 from google_play_scraper import app as GoogleApp
+import google_play_scraper as scraper
 
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -597,9 +598,12 @@ def add_ratings(request):
 
         form = AddRatingsForm(form_data)
 
+    version_str = scraper.__version__
+
     context = {
         'title': 'Ratings',
         'form': form,
+        'version_str': version_str
     }
 
     return render(request, 'timeline/rating_form.html', context)
