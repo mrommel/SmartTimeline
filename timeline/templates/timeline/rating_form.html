@@ -257,6 +257,7 @@
 	{% load static %}
 	<script>
 	    function refreshAll() {
+	        // android?
 	        refreshContent(620435371, 'myf_ios');
 	        refreshContent(372184475, 'fon_ios');
 	        refreshContent(1351324738, 'wlan_ios');
@@ -293,5 +294,9 @@
                 }
             });
         }
+        setTimeout(function () {
+            console.log("start updating iOS ratings");
+            refreshAll();
+        }, 1000);
 	</script>
 {% endblock %}
