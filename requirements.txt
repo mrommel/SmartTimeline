@@ -8,7 +8,7 @@ google-play-scraper==1.1.0
 itunes-app-scraper-dmi==0.9.4
 appstoreconnect==0.10.0
 idna==3.3
-lxml==4.8.0
+lxml==4.9.1
 pytz==2022.1
 requests==2.27.1
 sqlparse==0.4.2
