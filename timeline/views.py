@@ -598,7 +598,7 @@ def add_ratings(request):
 
         form = AddRatingsForm(form_data)
 
-    version_str = scraper.__version__
+    version_str = '---'
 
     context = {
         'title': 'Ratings',
