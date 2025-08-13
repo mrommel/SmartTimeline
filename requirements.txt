@@ -12,7 +12,7 @@ lxml==4.9.1
 pytz==2022.2.1
 requests==2.32.2
 sqlparse==0.5.0
-urllib3==1.26.19
+urllib3==2.5.0
 
 pip==23.3
 setuptools==70.0.0
